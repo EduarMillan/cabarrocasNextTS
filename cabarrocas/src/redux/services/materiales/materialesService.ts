@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-
+import axios, { AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 import useHttpClient from '@/redux/services/http/httpClient';
 
@@ -8,6 +8,23 @@ import {
 	editMaterial,
 	setMaterial,
 } from '@/redux/features/materiales/materialesSlice';
+
+type Material = {
+	id: number;
+	nombre: string;
+	descripcion: string;
+	espesor: string;
+	longitud_ancho: number;
+	longitud_largo: number;
+	calidad_material: string;
+	costo_total: number;
+	color: string;
+	cantidad: number;
+};
+
+type Response = {
+	data: Material[];
+};
 
 /**
  * CustomHook para los servicios de materiales.
@@ -44,8 +61,7 @@ export default function useMateriales() {
 
 	const getMateriales = async () => {
 		try {
-			const response = await get('/materiales');
-
+			const response = (await get('/materiales')) as AxiosResponse<Response>;
 			if (response.data) {
 				dispatch(setMaterial(response.data));
 			}
@@ -59,9 +75,11 @@ export default function useMateriales() {
 	 *
 	 */
 
-	const deleteMaterialById = async id => {
+	const deleteMaterialById = async (id: number) => {
 		try {
-			const response = await del(`/materiales/${id}`);
+			const response = (await del(
+				`/materiales/${id}`,
+			)) as AxiosResponse<Response>;
 
 			if (response.data) {
 				dispatch(deleteMaterial(id));
@@ -86,9 +104,12 @@ export default function useMateriales() {
 	 *
 	 */
 
-	const createMateriales = async material => {
+	const createMateriales = async (material: Material) => {
 		try {
-			const response = await post('/materiales', material);
+			const response = (await post(
+				'/materiales',
+				material,
+			)) as AxiosResponse<Response>;
 
 			if (response.data) {
 				dispatch(editMaterial(material));
@@ -113,9 +134,12 @@ export default function useMateriales() {
 	 *
 	 */
 
-	const updateMaterial = async (id, material) => {
+	const updateMaterial = async (id: number, material: Material) => {
 		try {
-			const response = await patch(`/materiales/${id}`, material);
+			const response = (await patch(
+				`/materiales/${id}`,
+				material,
+			)) as AxiosResponse<Response>;
 
 			if (response.data) {
 				dispatch(editMaterial(material));
