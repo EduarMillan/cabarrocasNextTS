@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 function Materiales() {
 
+
   const getMuiTheme = () => createTheme({
     components: {
       MUIDataTableBodyCell: {
@@ -61,7 +62,7 @@ function Materiales() {
 
   const { getMateriales, deleteMaterialById } = useMateriales();
   const materialesState = useSelector(selectMateriales);
-
+ 
   useEffect(() => {
   
     getMateriales();
@@ -149,6 +150,7 @@ function Materiales() {
   ];
 
   const options: MUIDataTableOptions = {
+    tableId:"materialesData",
     selectableRowsHeader: false,
     selectableRows: 'none',
     filterType: 'checkbox',

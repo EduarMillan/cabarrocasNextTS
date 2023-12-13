@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { createSelector } from 'reselect';
 
 interface Material {
 	id: number;
@@ -59,5 +60,8 @@ export const materialesSlice = createSlice({
 
 export const { setMaterial, deleteMaterial, getMateriales, editMaterial } =
 	materialesSlice.actions;
-export const selectMateriales = (state: any) => [state.materiales];
 export default materialesSlice.reducer;
+export const selectMateriales = createSelector(
+	(state: any) => state.materiales,
+	materiales => [materiales],
+);
