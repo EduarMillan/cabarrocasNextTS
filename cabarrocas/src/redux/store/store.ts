@@ -1,12 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { materialesSlice } from "../features/materiales/materialesSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import { materialesSlice } from '../features/materiales/materialesSlice';
 
 export const store = configureStore({
-  reducer: {
-
-    materiales: materialesSlice.reducer,
-
-  },
+	reducer: {
+		materiales: materialesSlice.reducer,
+	},
 });
 
 export type RootState = ReturnType<typeof store.getState>;

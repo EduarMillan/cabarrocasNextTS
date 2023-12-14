@@ -1,27 +1,25 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { StoreProvider } from "@/redux/store/StoreProvider";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { StoreProvider } from '@/redux/store/StoreProvider';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Taller Cabarrocas',
-  description: 'Creado por Ing. Eduardo Millan N.',
-}
+	title: 'Taller Cabarrocas',
+	description: 'Creado por Ing. Eduardo Millan N.',
+};
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <html lang="es">
-      <body className={inter.className}>
-        <StoreProvider>
-          {children}
-        </StoreProvider>
-      </body>
-    </html>
-  )
+	return (
+		<html lang='es'>
+			<body className={inter.className}>
+				<StoreProvider>{children}</StoreProvider>
+			</body>
+		</html>
+	);
 }
