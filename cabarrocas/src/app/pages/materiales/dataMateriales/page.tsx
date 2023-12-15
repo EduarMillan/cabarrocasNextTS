@@ -13,6 +13,11 @@ import { selectMateriales } from '@/redux/features/materiales/materialesSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 
+/**
+ * Renders the "Materiales" component.
+ *
+ * @return {JSX.Element} The rendered "Materiales" component.
+ */
 function Materiales() {
 	const getMuiTheme = () =>
 		createTheme({
@@ -133,7 +138,7 @@ function Materiales() {
 						</Tooltip>
 						<Tooltip title='Eliminar' arrow>
 							<IconButton
-							  aria-label='Eliminar'
+								aria-label='Eliminar'
 								style={{ color: '#FF0000' }}
 								onClick={() => {
 									//EjecutaEliminar(tableMeta.rowData[0]);
