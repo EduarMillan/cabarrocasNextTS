@@ -2,20 +2,17 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TextField, MenuItem, Select } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
+import { TextField, MenuItem } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
-import { materialSchema, mappedMateriales } from '@/validations/MaterialSchema';
-
-type ColorOption = {
-	english: string;
-	spanish: string;
-};
+import {
+	materialSchema,
+	mappedMateriales,
+	mappedColores,
+} from '@/validations/MaterialSchema';
 
 type Inputs = {
 	ancho: string;
@@ -28,16 +25,6 @@ type Inputs = {
 	largo: string;
 	material: string;
 };
-
-const colorOptions: Array<ColorOption> = [
-	{ english: '', spanish: '' },
-	{ english: 'Black', spanish: 'Negro' },
-	{ english: 'Transparent', spanish: 'Transparente' },
-	{ english: 'Red', spanish: 'Rojo' },
-	{ english: 'Green', spanish: 'Verde' },
-	{ english: 'Blue', spanish: 'Azul' },
-	{ english: 'Yellow', spanish: 'Amarillo' },
-];
 
 /**
  * Renders a form for selecting materials and their properties.
@@ -56,25 +43,28 @@ function FormMateriales() {
 	});
 
 	const materialOptions = Object.entries(mappedMateriales).map(
-		([key, value]) =>
-			key !== 'vacio' && (
-				<MenuItem key={key} value={value}>
-					{value}
-				</MenuItem>
-			),
+		([key, value]) => (
+			<MenuItem key={key} value={value}>
+				{value}
+			</MenuItem>
+		),
 	);
 
+	const colorOptions = Object.entries(mappedColores).map(([key, value]) => (
+		<MenuItem key={key} value={value}>
+			{value}
+		</MenuItem>
+	));
+
+	const selectedMaterial = watch('material');
 	useEffect(() => {
 		setValue('material', selectedMaterial);
 	}, [setValue]);
 
-	const selectedMaterial = watch('material');
-
-	useEffect(() => {
-		setValue('color', colorOptions[0].spanish);
-	}, [setValue]);
-
 	const selectedColor = watch('color');
+	useEffect(() => {
+		setValue('color', selectedColor);
+	}, [setValue]);
 
 	return (
 		<div className='flex items-center justify-center h-screen'>
@@ -87,29 +77,18 @@ function FormMateriales() {
 						className='grid grid-cols-2 gap-2 text-black pt-4 shadow-lg'
 						onSubmit={handleSubmit(data => console.log(data))}
 					>
-						<FormControl>
-							<InputLabel id='select-material' className='ml-3 mt-1'>
-								Material
-							</InputLabel>
-							<Select
-								className='m-3 shadow-lg text-sm'
-								labelId='select-material'
-								label='Material'
-								value={selectedMaterial || ''}
-								size='small'
-								{...register('material')}
-							>
-								<MenuItem value=''>
-									<em>Ninguno</em>
-								</MenuItem>
-								{materialOptions}
-							</Select>
-							{errors.material?.message && (
-								<p className='text-sm text-red-500 ml-3'>
-									{errors.material?.message}
-								</p>
-							)}
-						</FormControl>
+						<TextField
+							className='m-3 shadow-lg'
+							id='select-material'
+							select
+							label='Material'
+							size='small'
+							defaultValue=''
+							{...register('material')}
+							helperText={errors.material?.message}
+						>
+							{materialOptions}
+						</TextField>
 						<TextField
 							className='m-3 shadow-lg text-sm '
 							type='text'
@@ -118,7 +97,9 @@ function FormMateriales() {
 							multiline={true}
 							size='small'
 							{...register('descripcion')}
+							helperText={errors.descripcion?.message}
 						/>
+
 						<TextField
 							className='m-3 shadow-lg text-sm'
 							type='number'
@@ -126,7 +107,9 @@ function FormMateriales() {
 							label='Espesor(mm)'
 							size='small'
 							{...register('espesor')}
+							helperText={errors.espesor?.message}
 						/>
+
 						<TextField
 							className='m-3 shadow-lg'
 							type='number'
@@ -134,6 +117,7 @@ function FormMateriales() {
 							label='Ancho(m)'
 							size='small'
 							{...register('ancho')}
+							helperText={errors.ancho?.message}
 						/>
 						<TextField
 							className='m-3 shadow-lg'
@@ -142,6 +126,7 @@ function FormMateriales() {
 							label='Largo(m)'
 							size='small'
 							{...register('largo')}
+							helperText={errors.largo?.message}
 						/>
 						<TextField
 							className='m-3 shadow-lg'
@@ -150,39 +135,22 @@ function FormMateriales() {
 							label='Costo(CUP)'
 							size='small'
 							{...register('costo')}
+							helperText={errors.costo?.message}
 						/>
-						<FormControl>
-							<InputLabel id='select-color' className='ml-3 mt-1'>
-								Color
-							</InputLabel>
-							<Select
-								className='m-3 w-56 shadow-lg'
-								labelId='select-color'
-								label='Color'
-								value={selectedColor || ''}
-								size='small'
-								{...register('color')}
-							>
-								<MenuItem value=''>
-									<em>Ninguno</em>
-								</MenuItem>
-								{colorOptions.map(
-									color =>
-										color.spanish !== '' && (
-											<MenuItem
-												key={color.english}
-												value={color.spanish}
-												style={{
-													backgroundColor: color.english,
-													color: color.english === 'Black' ? 'white' : 'black',
-												}}
-											>
-												{color.spanish}
-											</MenuItem>
-										),
-								)}
-							</Select>
-						</FormControl>
+
+						<TextField
+							className='m-3 shadow-lg'
+							id='select-color'
+							select
+							label='Color'
+							size='small'
+							defaultValue=''
+							{...register('color')}
+							helperText={errors.color?.message}
+						>
+							{colorOptions}
+						</TextField>
+
 						<TextField
 							className='m-3 shadow-lg'
 							type='number'
@@ -190,6 +158,7 @@ function FormMateriales() {
 							label='Cantidad'
 							size='small'
 							{...register('cantidad')}
+							helperText={errors.cantidad?.message}
 						/>
 						<Typography className='m-2 text-zinc-700'>
 							Seleccione calidad del material:
@@ -204,7 +173,8 @@ function FormMateriales() {
 							<Switch defaultChecked {...register('calidad')} />
 							<Typography>Alta</Typography>
 						</Stack>
-						<div className='flex pb-5 justify-end pt-6 space-x-4'>
+						<div></div>
+						<div className='flex pb-5 justify-end items-end pt-6 space-x-4'>
 							<SecondaryButton name='Cancelar' />
 							<PrimaryButton name='Guardar' />
 						</div>
