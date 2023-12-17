@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
-import axios, { AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
+import { AxiosResponse } from 'axios';
 import useHttpClient from '@/redux/services/http/httpClient';
 
 import {
@@ -9,21 +9,20 @@ import {
 	setMaterial,
 } from '@/redux/features/materiales/materialesSlice';
 
-type Material = {
-	id: number;
-	nombre: string;
+type Inputs = {
+	longitud_ancho: string;
+	calidad_material: string;
+	cantidad: string;
+	color: string;
+	costo_total: string;
 	descripcion: string;
 	espesor: string;
-	longitud_ancho: number;
-	longitud_largo: number;
-	calidad_material: string;
-	costo_total: number;
-	color: string;
-	cantidad: number;
+	longitud_largo: string;
+	nombre: string;
 };
 
 type Response = {
-	data: Material[];
+	data: Inputs[];
 };
 
 /**
@@ -55,7 +54,7 @@ export default function useMateriales() {
 	 */
 
 	/**
-	 * Metodo que consulta las lineas.
+	 * Metodo que consulta los materiales.
 	 *
 	 */
 
@@ -104,7 +103,7 @@ export default function useMateriales() {
 	 *
 	 */
 
-	const createMateriales = async (material: Material) => {
+	const createMateriales = async (material: Inputs) => {
 		try {
 			const response = (await post(
 				'/materiales',
@@ -134,7 +133,7 @@ export default function useMateriales() {
 	 *
 	 */
 
-	const updateMaterial = async (id: number, material: Material) => {
+	const updateMaterial = async (id: number, material: Inputs) => {
 		try {
 			const response = (await patch(
 				`/materiales/${id}`,

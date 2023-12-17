@@ -87,22 +87,26 @@ export const materialSchema = z.object({
 		.max(100, {
 			message: 'Descripción muy larga (- de 100 letras)',
 		}),
-	ancho: z.string().refine(ancho => parseFloat(ancho) > 0, {
-		message: 'El ancho debe de ser mayor que 0',
-	}),
-	material: z.enum(materiales, {
+	longitud_ancho: z
+		.string()
+		.refine(longitud_ancho => parseFloat(longitud_ancho) > 0, {
+			message: 'El ancho debe de ser mayor que 0',
+		}),
+	nombre: z.enum(materiales, {
 		errorMap: () => ({
 			message: 'Seleccione un material de la lista.',
 		}),
 	}),
-	calidad: z.boolean().default(true),
-	largo: z.string().refine(largo => parseFloat(largo) > 0, {
-		message: 'El largo debe de ser mayor que 0',
-	}),
+	calidad_material: z.boolean().default(true),
+	longitud_largo: z
+		.string()
+		.refine(longitud_largo => parseFloat(longitud_largo) > 0, {
+			message: 'El largo debe de ser mayor que 0',
+		}),
 	cantidad: z.string().refine(cantidad => parseFloat(cantidad) > 0, {
 		message: 'La cantidad debe de ser mayor que 0',
 	}),
-	costo: z.string().refine(costo => parseFloat(costo) > 0, {
+	costo_total: z.string().refine(costo_total => parseFloat(costo_total) > 0, {
 		message: 'El costo debe de ser mayor que 0',
 	}),
 	color: z.enum(colores, {

@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, MenuItem } from '@mui/material';
 import Switch from '@mui/material/Switch';
@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
+import useMateriales from '@/redux/services/materiales/materialesService'; 
 import {
 	materialSchema,
 	mappedMateriales,
@@ -15,15 +16,15 @@ import {
 } from '@/validations/MaterialSchema';
 
 type Inputs = {
-	ancho: string;
-	calidad: string;
+	longitud_ancho: string;
+	calidad_material: string;
 	cantidad: string;
 	color: string;
-	costo: string;
+	costo_total: string;
 	descripcion: string;
 	espesor: string;
-	largo: string;
-	material: string;
+	longitud_largo: string;
+	nombre: string;
 };
 
 /**
@@ -32,6 +33,8 @@ type Inputs = {
  * @return {JSX.Element} The rendered form component.
  */
 function FormMateriales() {
+
+	const { createMateriales } = useMateriales();
 	const {
 		register,
 		handleSubmit,
@@ -56,15 +59,19 @@ function FormMateriales() {
 		</MenuItem>
 	));
 
-	const selectedMaterial = watch('material');
+	const selectedMaterial = watch('nombre');
 	useEffect(() => {
-		setValue('material', selectedMaterial);
+		setValue('nombre', selectedMaterial);
 	}, [setValue]);
 
 	const selectedColor = watch('color');
 	useEffect(() => {
 		setValue('color', selectedColor);
 	}, [setValue]);
+
+	const saveMaterials: SubmitHandler<Inputs> =  async data => {
+		await createMateriales(data);
+	}
 
 	return (
 		<div className='flex items-center justify-center h-screen'>
@@ -75,7 +82,7 @@ function FormMateriales() {
 				<div className='bg-zinc-500  rounded-md px-10 shadow-lg bg-gradient-to-r from-slate-400 to-slate-100'>
 					<form
 						className='grid grid-cols-2 gap-2 text-black pt-4 shadow-lg'
-						onSubmit={handleSubmit(data => console.log(data))}
+						onSubmit={handleSubmit(saveMaterials)}
 					>
 						<TextField
 							className='m-3 shadow-lg'
@@ -84,8 +91,8 @@ function FormMateriales() {
 							label='Material'
 							size='small'
 							defaultValue=''
-							{...register('material')}
-							helperText={errors.material?.message}
+							{...register('nombre')}
+							helperText={errors.nombre?.message}
 						>
 							{materialOptions}
 						</TextField>
@@ -116,8 +123,8 @@ function FormMateriales() {
 							id='outlined-ancho'
 							label='Ancho(m)'
 							size='small'
-							{...register('ancho')}
-							helperText={errors.ancho?.message}
+							{...register('longitud_ancho')}
+							helperText={errors.longitud_ancho?.message}
 						/>
 						<TextField
 							className='m-3 shadow-lg'
@@ -125,8 +132,8 @@ function FormMateriales() {
 							id='outlined-largo'
 							label='Largo(m)'
 							size='small'
-							{...register('largo')}
-							helperText={errors.largo?.message}
+							{...register('longitud_largo')}
+							helperText={errors.longitud_largo?.message}
 						/>
 						<TextField
 							className='m-3 shadow-lg'
@@ -134,8 +141,8 @@ function FormMateriales() {
 							id='outlined-costo'
 							label='Costo(CUP)'
 							size='small'
-							{...register('costo')}
-							helperText={errors.costo?.message}
+							{...register('costo_total')}
+							helperText={errors.costo_total?.message}
 						/>
 
 						<TextField
@@ -170,7 +177,7 @@ function FormMateriales() {
 							alignItems='center'
 						>
 							<Typography>Baja</Typography>
-							<Switch defaultChecked {...register('calidad')} />
+							<Switch defaultChecked {...register('calidad_material')} />
 							<Typography>Alta</Typography>
 						</Stack>
 						<div></div>
