@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MUIDataTable, {
 	MUIDataTableColumn,
 	MUIDataTableOptions,
@@ -12,6 +12,7 @@ import useMateriales from '@/redux/services/materiales/materialesService';
 import { selectMateriales } from '@/redux/features/materiales/materialesSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
+import CustomModal from '@/components/utils/CustomModal';
 
 /**
  * Renders the "Materiales" component.
@@ -68,6 +69,12 @@ function Materiales() {
 
 	const { getMateriales, deleteMaterialById } = useMateriales();
 	const materialesState = useSelector(selectMateriales);
+	const [openModal, setopenModal] = useState(false);
+	const [idMaterial, setidMaterial] = useState(0);
+
+	const deleteMaterialId = () =>{
+			deleteMaterialById(idMaterial);			
+	}
 
 	useEffect(() => {
 		getMateriales();
@@ -141,8 +148,10 @@ function Materiales() {
 								aria-label='Eliminar'
 								style={{ color: '#FF0000' }}
 								onClick={() => {
-									//EjecutaEliminar(tableMeta.rowData[0]);
-									deleteMaterialById(tableMeta.rowData[0]);
+									
+									setopenModal(true); 
+									setidMaterial(tableMeta.rowData[0]);
+
 								}}
 							>
 								<DeleteIcon> </DeleteIcon>
@@ -209,6 +218,16 @@ function Materiales() {
 					data={materiales}
 					columns={columns}
 					options={options}
+				/>
+				<CustomModal 
+					open={openModal} 
+					title='Eliminar Material'
+					body="Está seguro de querer eliminar este material?" 
+					onClose={() => {setopenModal(false)}}
+					accion={() => {
+						deleteMaterialId()
+						setopenModal(false)
+					}}
 				/>
 			</ThemeProvider>
 		</div>

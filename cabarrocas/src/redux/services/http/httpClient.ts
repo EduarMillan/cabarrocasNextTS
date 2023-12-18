@@ -1,8 +1,5 @@
 import { useState } from 'react';
-
 import axios from 'axios';
-import Error from 'next/error';
-import { ErrorHandler } from 'next/dist/server/app-render/create-error-handler';
 
 /**
  * CustomHook para realizar peticiones http.
@@ -13,8 +10,8 @@ import { ErrorHandler } from 'next/dist/server/app-render/create-error-handler';
 const useHttpClient = () => {
 	const [error, setError] = useState(null);
 
-	const handleError = err => {
-		let message = 'Ocurrió un error desconocido';
+	const handleError = (err: any) => {
+		let message: any = 'Ocurrió un error desconocido';
 
 		if (err.response) {
 			const { data } = err.response;
@@ -29,7 +26,7 @@ const useHttpClient = () => {
 		throw err;
 	};
 
-	const get = async route => {
+	const get = async (route: string) => {
 		try {
 			const response = await axios.get(route, {
 				baseURL: 'http://localhost:3000/api',
@@ -44,7 +41,7 @@ const useHttpClient = () => {
 		}
 	};
 
-	const post = async (route, data) => {
+	const post = async <T>(route: string, data: T) => {
 		try {
 			const response = await axios.post(route, data, {
 				baseURL: 'http://localhost:3000/api',
@@ -60,7 +57,7 @@ const useHttpClient = () => {
 		}
 	};
 
-	const put = async (route, data) => {
+	const put = async <T>(route: string, data: T) => {
 		try {
 			const response = await axios.put(route, data, {
 				baseURL: 'http://localhost:3000/api',
@@ -76,7 +73,7 @@ const useHttpClient = () => {
 		}
 	};
 
-	const patch = async (route, data) => {
+	const patch = async <T>(route: string, data: T) => {
 		try {
 			const response = await axios.patch(route, data, {
 				baseURL: 'http://localhost:3000/api',
@@ -92,7 +89,7 @@ const useHttpClient = () => {
 		}
 	};
 
-	const del = async route => {
+	const del = async (route: string) => {
 		try {
 			const response = await axios.delete(route, {
 				baseURL: 'http://localhost:3000/api',
