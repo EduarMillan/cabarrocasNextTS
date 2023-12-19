@@ -6,13 +6,23 @@ import MUIDataTable, {
 } from 'mui-datatables';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { IconButton } from '@mui/material';
+import {
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	IconButton,
+} from '@mui/material';
 import { useSelector } from 'react-redux';
 import useMateriales from '@/redux/services/materiales/materialesService';
 import { selectMateriales } from '@/redux/features/materiales/materialesSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import CustomModal from '@/components/utils/CustomModal';
+import SecondaryButton from '@/components/utils/SecondaryButton';
+import PrimaryButton from '@/components/utils/PrimaryButton';
+import FormMateriales from '../formMateriales/page';
+import AddIcon from '@mui/icons-material/Add';
 
 /**
  * Renders the "Materiales" component.
@@ -28,14 +38,18 @@ function Materiales() {
 						root: {
 							backgroundColor: '#09131A',
 							color: '#ffffff',
+							fontSize: '12px',
+							padding: '5px',
 						},
 					},
 				},
 				MUIDataTableHeadCell: {
 					styleOverrides: {
 						root: {
-							backgroundColor: '#44657C',
+							backgroundColor: '#115e59',
 							color: '#ffffff',
+							fontSize: '12px',
+							padding: '5px',
 						},
 					},
 				},
@@ -53,7 +67,8 @@ function Materiales() {
 				MUIDataTableFooter: {
 					styleOverrides: {
 						root: {
-							backgroundColor: '#44657C',
+							backgroundColor: '#115e59',
+							fontSize: '12px',
 						},
 					},
 				},
@@ -70,11 +85,18 @@ function Materiales() {
 	const { getMateriales, deleteMaterialById } = useMateriales();
 	const materialesState = useSelector(selectMateriales);
 	const [openModal, setopenModal] = useState(false);
+	const [crearMaterial, setcrearMaterial] = useState(false);
+	const [eliminarMaterial, seteliminarMaterial] = useState(false);
 	const [idMaterial, setidMaterial] = useState(0);
 
-	const deleteMaterialId = () =>{
-			deleteMaterialById(idMaterial);			
-	}
+	const deleteMaterialId = () => {
+		deleteMaterialById(idMaterial);
+	};
+
+	const handleCancel = () => {
+		setopenModal(false);
+		setcrearMaterial(false);
+	};
 
 	useEffect(() => {
 		getMateriales();
@@ -129,13 +151,31 @@ function Materiales() {
 			label: 'Acciones',
 
 			options: {
-				filter: true,
+				filter: false,
+				customHeadRender: (columnMeta: any) => (
+					<th key={columnMeta.index} className='bg-teal-800 border-b'>
+						{columnMeta.index === columns.length - 1 ? (
+							<Tooltip title='Insertar Material' arrow>
+								<IconButton
+									aria-label='Insertar Material'
+									style={{ color: '#ffffff' }}
+									onClick={() => {
+										setcrearMaterial(true);
+										setopenModal(true);
+									}}
+								>
+									<AddIcon className='bg-green-500 rounded-full w-16 shadow-lg' />
+								</IconButton>
+							</Tooltip>
+						) : null}
+					</th>
+				),
 				customBodyRender: (value: any, tableMeta: any) => (
 					<div className='flex'>
 						<Tooltip title='Editar' arrow>
 							<IconButton
 								aria-label='Editar'
-								style={{ color: '#00FF33' }}
+								style={{ color: '#ca8a04' }}
 								onClick={() => {
 									//navigate(`/dashboard/materiales/${tableMeta.rowData[0]}`);
 								}}
@@ -146,12 +186,11 @@ function Materiales() {
 						<Tooltip title='Eliminar' arrow>
 							<IconButton
 								aria-label='Eliminar'
-								style={{ color: '#FF0000' }}
+								style={{ color: '#f87171' }}
 								onClick={() => {
-									
-									setopenModal(true); 
+									seteliminarMaterial(true);
+									setopenModal(true);
 									setidMaterial(tableMeta.rowData[0]);
-
 								}}
 							>
 								<DeleteIcon> </DeleteIcon>
@@ -219,16 +258,36 @@ function Materiales() {
 					columns={columns}
 					options={options}
 				/>
-				<CustomModal 
-					open={openModal} 
-					title='Eliminar Material'
-					body="Está seguro de querer eliminar este material?" 
-					onClose={() => {setopenModal(false)}}
-					accion={() => {
-						deleteMaterialId()
-						setopenModal(false)
-					}}
-				/>
+				<CustomModal open={openModal} width='md'>
+					{crearMaterial ? (
+						<FormMateriales onCancel={handleCancel} />
+					) : eliminarMaterial ? (
+						<div>
+							<DialogTitle>Eliminar Material</DialogTitle>
+							<DialogContent>
+								<DialogContentText>
+									Está seguro de querer eliminar este material?
+								</DialogContentText>
+							</DialogContent>
+							<DialogActions>
+								<SecondaryButton
+									name='Cancelar'
+									onClick={() => {
+										seteliminarMaterial(false);
+										setopenModal(false);
+									}}
+								/>
+								<PrimaryButton
+									name='Aceptar'
+									onClick={() => {
+										deleteMaterialId();
+										setopenModal(false);
+									}}
+								/>
+							</DialogActions>
+						</div>
+					) : null}
+				</CustomModal>
 			</ThemeProvider>
 		</div>
 	);

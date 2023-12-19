@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
-import useMateriales from '@/redux/services/materiales/materialesService'; 
+import useMateriales from '@/redux/services/materiales/materialesService';
 import {
 	materialSchema,
 	mappedMateriales,
@@ -32,8 +32,7 @@ type Inputs = {
  *
  * @return {JSX.Element} The rendered form component.
  */
-function FormMateriales() {
-
+function FormMateriales({ onCancel }: any) {
 	const { createMateriales } = useMateriales();
 	const {
 		register,
@@ -69,19 +68,19 @@ function FormMateriales() {
 		setValue('color', selectedColor);
 	}, [setValue]);
 
-	const saveMaterials: SubmitHandler<Inputs> =  async data => {
+	const saveMaterials: SubmitHandler<Inputs> = async data => {
 		await createMateriales(data);
-	}
+	};
 
 	return (
-		<div className='flex items-center justify-center h-screen'>
+		<div className='flex items-center justify-center m-1 '>
 			<div>
 				<div className='bg-slate-900  rounded-md px-10 flex items-center justify-center p-2 mb-1 bg-gradient-to-r from-blue-900 to-blue-400'>
 					<p className='text-slate-50 font-normal '>Formulario de Materiales</p>
 				</div>
 				<div className='bg-zinc-500  rounded-md px-10 shadow-lg bg-gradient-to-r from-slate-400 to-slate-100'>
 					<form
-						className='grid grid-cols-2 gap-2 text-black pt-4 shadow-lg'
+						className='grid grid-cols-3 gap-2 text-black pt-4 shadow-lg'
 						onSubmit={handleSubmit(saveMaterials)}
 					>
 						<TextField
@@ -167,22 +166,25 @@ function FormMateriales() {
 							{...register('cantidad')}
 							helperText={errors.cantidad?.message}
 						/>
-						<Typography className='m-2 text-zinc-700'>
-							Seleccione calidad del material:
-						</Typography>
+
 						<Stack
 							className='justify-start ml-4 '
 							direction='row'
 							spacing={0.5}
 							alignItems='center'
 						>
-							<Typography>Baja</Typography>
-							<Switch defaultChecked {...register('calidad_material')} />
-							<Typography>Alta</Typography>
+							<Typography className='m-2 text-zinc-700'>Calidad:</Typography>
+							<Typography className='italic pl-2'>Baja</Typography>
+							<Switch
+								id='calidad'
+								defaultChecked
+								{...register('calidad_material')}
+							/>
+							<Typography className='italic'>Alta</Typography>
 						</Stack>
 						<div></div>
 						<div className='flex pb-5 justify-end items-end pt-6 space-x-4'>
-							<SecondaryButton name='Cancelar' />
+							<SecondaryButton name='Cancelar' onClick={onCancel} />
 							<PrimaryButton name='Guardar' />
 						</div>
 					</form>

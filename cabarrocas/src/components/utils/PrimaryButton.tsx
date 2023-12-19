@@ -1,21 +1,28 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
+type PrimaryButtonProps = {
+	name: string;
+	onClick?: () => void;
+};
+
 /**
- * Renders a primary button component with the specified name.
+ * Renders a secondary button component with the given name.
  *
- * @param {string} name - The name to be displayed on the button.
- * @return {JSX.Element} - The primary button component.
+ * @param {PrimaryButtonProps} props - The props for the SecondaryButton.
+ * @return {JSX.Element} - The rendered secondary button component.
  */
-function PrimaryButton({ name }: { name: string }) {
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({ name, onClick }) => {
 	return (
 		<Button
 			className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
 			type='submit'
+			variant='contained'
+			onClick={onClick}
 		>
 			{name}
 		</Button>
 	);
-}
+};
 
 export default PrimaryButton;

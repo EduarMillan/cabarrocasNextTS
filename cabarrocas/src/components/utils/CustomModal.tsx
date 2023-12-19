@@ -1,55 +1,26 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import PrimaryButton from './PrimaryButton';
-import SecondaryButton from './SecondaryButton';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
 
 type modalTypes = {
-    open: boolean;
-    onClose: () => void;
-    title: string;
-    body: string;
-    accion: () => void;
-  };
+	open: boolean;
+	children: React.ReactNode;
+	width: DialogProps['maxWidth'];
+};
 
 export default function CustomModal(props: modalTypes) {
+	const paperStyle = {
+		backgroundColor: '#EAECEE',
+	};
 
-  const handleClose = () => {
-    props.onClose();
-  };
-
-  const handleClick = () => {
-    props.accion();
-  };
-  
-
-  return (
-    <React.Fragment>
-      <Dialog
-        open={props.open}
-        onClose = {handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {props.title}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {props.body}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={handleClick} autoFocus>Aceptar</Button>
-          {/* <SecondaryButton name = "Cancelar"/> */}
-          {/* <PrimaryButton name = "Aceptar"/> */}
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			<Dialog
+				open={props.open}
+				maxWidth={props.width}
+				PaperProps={{ style: paperStyle }}
+			>
+				{props.children}
+			</Dialog>
+		</React.Fragment>
+	);
 }
