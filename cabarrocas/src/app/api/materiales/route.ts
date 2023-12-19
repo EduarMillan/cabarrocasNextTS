@@ -7,7 +7,6 @@ interface FormData {
 	espesor: string;
 	longitud_ancho: number;
 	longitud_largo: number;
-	calidad_material: string;
 	costo_total: number;
 	color: string;
 	cantidad: number;
@@ -26,7 +25,6 @@ export async function POST(req: any) {
 			espesor,
 			longitud_ancho,
 			longitud_largo,
-			calidad_material,
 			costo_total,
 			color,
 			cantidad,
@@ -40,14 +38,13 @@ export async function POST(req: any) {
 		for (let i: number = 0; i < cantidad; i += 1) {
 			queries.push(
 				conn.query(
-					"INSERT INTO materiales (nombre, descripcion, espesor, longitud_ancho, longitud_largo, calidad_material, costo_total, costo_m2, costo_ml, cantidad, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'1',?)",
+					"INSERT INTO materiales (nombre, descripcion, espesor, longitud_ancho, longitud_largo, costo_total, costo_m2, costo_ml, cantidad, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?,'1',?)",
 					[
 						nombre,
 						descripcion,
 						espesor,
 						longitud_ancho,
 						longitud_largo,
-						calidad_material,
 						costo_total,
 						costoM2,
 						costoMl,

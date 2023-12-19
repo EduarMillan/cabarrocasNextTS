@@ -89,32 +89,47 @@ export const materialSchema = z.object({
 		}),
 	longitud_ancho: z
 		.string()
+		.refine(longitud_ancho => !isNaN(parseFloat(longitud_ancho)), {
+			message: 'El ancho debe ser un número',
+		})
 		.refine(longitud_ancho => parseFloat(longitud_ancho) > 0, {
-			message: 'El ancho debe de ser mayor que 0',
+			message: 'El ancho debe ser mayor que 0',
 		}),
 	nombre: z.enum(materiales, {
 		errorMap: () => ({
 			message: 'Seleccione un material de la lista.',
 		}),
 	}),
-	calidad_material: z.boolean().default(true),
 	longitud_largo: z
 		.string()
+		.refine(longitud_largo => !isNaN(parseFloat(longitud_largo)), {
+			message: 'El largo debe ser un número',
+		})
 		.refine(longitud_largo => parseFloat(longitud_largo) > 0, {
-			message: 'El largo debe de ser mayor que 0',
+			message: 'El largo debe ser mayor que 0',
 		}),
 	cantidad: z.string().refine(cantidad => parseFloat(cantidad) > 0, {
 		message: 'La cantidad debe de ser mayor que 0',
 	}),
-	costo_total: z.string().refine(costo_total => parseFloat(costo_total) > 0, {
-		message: 'El costo debe de ser mayor que 0',
-	}),
+	costo_total: z
+		.string()
+		.refine(costo_total => !isNaN(parseFloat(costo_total)), {
+			message: 'El Costo debe ser un número',
+		})
+		.refine(costo_total => parseFloat(costo_total) > 0, {
+			message: 'El Costo debe ser mayor que 0',
+		}),
 	color: z.enum(colores, {
 		errorMap: () => ({
 			message: 'Seleccione un color de la lista.',
 		}),
 	}),
-	espesor: z.string().refine(espesor => parseFloat(espesor) > 0, {
-		message: 'El grosor debe de ser mayor que 0',
-	}),
+	espesor: z
+		.string()
+		.refine(espesor => !isNaN(parseFloat(espesor)), {
+			message: 'El grosor debe ser un número',
+		})
+		.refine(espesor => parseFloat(espesor) > 0, {
+			message: 'El grosor debe ser mayor que 0',
+		}),
 });

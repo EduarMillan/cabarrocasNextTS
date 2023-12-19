@@ -5,13 +5,11 @@ import useHttpClient from '@/redux/services/http/httpClient';
 
 import {
 	deleteMaterial,
-	editMaterial,
 	setMaterial,
 } from '@/redux/features/materiales/materialesSlice';
 
 type Inputs = {
 	longitud_ancho: string;
-	calidad_material: string;
 	cantidad: string;
 	color: string;
 	costo_total: string;
@@ -111,7 +109,7 @@ export default function useMateriales() {
 			)) as AxiosResponse<Response>;
 
 			if (response.data) {
-				dispatch(editMaterial(material));
+				getMateriales();
 
 				toast.success('El material se ha creado satisfactoriamente', {
 					duration: 2000,
@@ -141,7 +139,7 @@ export default function useMateriales() {
 			)) as AxiosResponse<Response>;
 
 			if (response.data) {
-				dispatch(editMaterial(material));
+				getMateriales();
 
 				toast.success('El material se ha actualizado satisfactoriamente', {
 					duration: 2000,

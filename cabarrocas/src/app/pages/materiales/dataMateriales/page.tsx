@@ -24,6 +24,7 @@ import PrimaryButton from '@/components/utils/PrimaryButton';
 import FormMateriales from '../formMateriales/page';
 import AddIcon from '@mui/icons-material/Add';
 
+
 /**
  * Renders the "Materiales" component.
  *
@@ -84,18 +85,19 @@ function Materiales() {
 
 	const { getMateriales, deleteMaterialById } = useMateriales();
 	const materialesState = useSelector(selectMateriales);
-	const [openModal, setopenModal] = useState(false);
-	const [crearMaterial, setcrearMaterial] = useState(false);
-	const [eliminarMaterial, seteliminarMaterial] = useState(false);
-	const [idMaterial, setidMaterial] = useState(0);
+	const [openModal, setOpenModal] = useState(false);
+	const [crearMaterial, setCrearMaterial] = useState(false);
+	const [eliminarMaterial, setEliminarMaterial] = useState(false);
+	const [idMaterial, setIdMaterial] = useState(0);
+	const [updateMaterial, setUpdateMaterial] = useState(null);
 
 	const deleteMaterialId = () => {
 		deleteMaterialById(idMaterial);
 	};
 
 	const handleCancel = () => {
-		setopenModal(false);
-		setcrearMaterial(false);
+		setOpenModal(false);
+		setCrearMaterial(false);
 	};
 
 	useEffect(() => {
@@ -130,10 +132,10 @@ function Materiales() {
 			name: 'longitud_largo',
 			label: 'Largo (m)',
 		},
-		{
-			name: 'calidad_material',
-			label: 'Calidad',
-		},
+		// {
+		// 	name: 'calidad_material',
+		// 	label: 'Calidad',
+		// },
 		{
 			name: 'costo_total',
 			label: 'Costo Total',
@@ -160,8 +162,9 @@ function Materiales() {
 									aria-label='Insertar Material'
 									style={{ color: '#ffffff' }}
 									onClick={() => {
-										setcrearMaterial(true);
-										setopenModal(true);
+										setUpdateMaterial(null);
+										setCrearMaterial(true);
+										setOpenModal(true);
 									}}
 								>
 									<AddIcon className='bg-green-500 rounded-full w-16 shadow-lg' />
@@ -177,7 +180,9 @@ function Materiales() {
 								aria-label='Editar'
 								style={{ color: '#ca8a04' }}
 								onClick={() => {
-									//navigate(`/dashboard/materiales/${tableMeta.rowData[0]}`);
+									setUpdateMaterial(tableMeta.rowData);
+									setCrearMaterial(true);
+									setOpenModal(true);
 								}}
 							>
 								<AssignmentIcon />
@@ -188,9 +193,9 @@ function Materiales() {
 								aria-label='Eliminar'
 								style={{ color: '#f87171' }}
 								onClick={() => {
-									seteliminarMaterial(true);
-									setopenModal(true);
-									setidMaterial(tableMeta.rowData[0]);
+									setEliminarMaterial(true);
+									setOpenModal(true);
+									setIdMaterial(tableMeta.rowData[0]);
 								}}
 							>
 								<DeleteIcon> </DeleteIcon>
@@ -249,6 +254,40 @@ function Materiales() {
 		},
 	};
 
+	let modalContent;
+	if (crearMaterial) {
+		modalContent = (
+			<FormMateriales onCancel={handleCancel} material={updateMaterial} />
+		);
+	} else if (eliminarMaterial) {
+		modalContent = (
+			<div>
+				<DialogTitle>Eliminar Material</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						¿Está seguro de querer eliminar este material?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<SecondaryButton
+						name='Cancelar'
+						onClick={() => {
+							setEliminarMaterial(false);
+							setOpenModal(false);
+						}}
+					/>
+					<PrimaryButton
+						name='Aceptar'
+						onClick={() => {
+							deleteMaterialId();
+							setOpenModal(false);
+						}}
+					/>
+				</DialogActions>
+			</div>
+		);
+	}
+
 	return (
 		<div className='container my-10 mx-auto bg-slate-500'>
 			<ThemeProvider theme={getMuiTheme()}>
@@ -259,34 +298,7 @@ function Materiales() {
 					options={options}
 				/>
 				<CustomModal open={openModal} width='md'>
-					{crearMaterial ? (
-						<FormMateriales onCancel={handleCancel} />
-					) : eliminarMaterial ? (
-						<div>
-							<DialogTitle>Eliminar Material</DialogTitle>
-							<DialogContent>
-								<DialogContentText>
-									Está seguro de querer eliminar este material?
-								</DialogContentText>
-							</DialogContent>
-							<DialogActions>
-								<SecondaryButton
-									name='Cancelar'
-									onClick={() => {
-										seteliminarMaterial(false);
-										setopenModal(false);
-									}}
-								/>
-								<PrimaryButton
-									name='Aceptar'
-									onClick={() => {
-										deleteMaterialId();
-										setopenModal(false);
-									}}
-								/>
-							</DialogActions>
-						</div>
-					) : null}
+					{modalContent}
 				</CustomModal>
 			</ThemeProvider>
 		</div>

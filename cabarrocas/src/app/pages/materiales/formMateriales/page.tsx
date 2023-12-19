@@ -3,9 +3,6 @@ import React, { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, MenuItem } from '@mui/material';
-import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
 import useMateriales from '@/redux/services/materiales/materialesService';
@@ -17,7 +14,7 @@ import {
 
 type Inputs = {
 	longitud_ancho: string;
-	calidad_material: string;
+	//calidad_material: string;
 	cantidad: string;
 	color: string;
 	costo_total: string;
@@ -32,13 +29,13 @@ type Inputs = {
  *
  * @return {JSX.Element} The rendered form component.
  */
-function FormMateriales({ onCancel }: any) {
-	const { createMateriales } = useMateriales();
+function FormMateriales({ onCancel, material }: any) {
+	const { createMateriales, updateMaterial } = useMateriales();
+
 	const {
 		register,
 		handleSubmit,
 		setValue,
-		watch,
 		formState: { errors },
 	} = useForm<Inputs>({
 		resolver: zodResolver(materialSchema),
@@ -58,18 +55,26 @@ function FormMateriales({ onCancel }: any) {
 		</MenuItem>
 	));
 
-	const selectedMaterial = watch('nombre');
 	useEffect(() => {
-		setValue('nombre', selectedMaterial);
-	}, [setValue]);
-
-	const selectedColor = watch('color');
-	useEffect(() => {
-		setValue('color', selectedColor);
-	}, [setValue]);
+		if (material) {
+			setValue('nombre', material[1]);
+			setValue('descripcion', material[2]);
+			setValue('espesor', material[3].toString());
+			setValue('longitud_ancho', material[4].toString());
+			setValue('longitud_largo', material[5].toString());
+			setValue('costo_total', material[6].toString());
+			setValue('cantidad', material[7].toString());
+			setValue('color', material[8]);
+		}
+	}, [setValue, material]);
 
 	const saveMaterials: SubmitHandler<Inputs> = async data => {
-		await createMateriales(data);
+		if (material) {
+			await updateMaterial(material[0], data);
+		} else {
+			await createMateriales(data);
+		}
+		onCancel();
 	};
 
 	return (
@@ -80,7 +85,7 @@ function FormMateriales({ onCancel }: any) {
 				</div>
 				<div className='bg-zinc-500  rounded-md px-10 shadow-lg bg-gradient-to-r from-slate-400 to-slate-100'>
 					<form
-						className='grid grid-cols-3 gap-2 text-black pt-4 shadow-lg'
+						className='grid grid-cols-2 gap-2 text-black pt-4 shadow-lg'
 						onSubmit={handleSubmit(saveMaterials)}
 					>
 						<TextField
@@ -89,7 +94,7 @@ function FormMateriales({ onCancel }: any) {
 							select
 							label='Material'
 							size='small'
-							defaultValue=''
+							defaultValue={material ? material[1] : ''}
 							{...register('nombre')}
 							helperText={errors.nombre?.message}
 						>
@@ -101,6 +106,7 @@ function FormMateriales({ onCancel }: any) {
 							id='outlined-descripcion'
 							label='Descripción'
 							multiline={true}
+							defaultValue={material ? material[2] : ''}
 							size='small'
 							{...register('descripcion')}
 							helperText={errors.descripcion?.message}
@@ -108,9 +114,10 @@ function FormMateriales({ onCancel }: any) {
 
 						<TextField
 							className='m-3 shadow-lg text-sm'
-							type='number'
+							type='text'
 							id='outlined-espesor'
 							label='Espesor(mm)'
+							defaultValue={material ? material[3] : ''}
 							size='small'
 							{...register('espesor')}
 							helperText={errors.espesor?.message}
@@ -118,27 +125,30 @@ function FormMateriales({ onCancel }: any) {
 
 						<TextField
 							className='m-3 shadow-lg'
-							type='number'
+							type='text'
 							id='outlined-ancho'
 							label='Ancho(m)'
+							defaultValue={material ? material[4] : ''}
 							size='small'
 							{...register('longitud_ancho')}
 							helperText={errors.longitud_ancho?.message}
 						/>
 						<TextField
 							className='m-3 shadow-lg'
-							type='number'
+							type='text'
 							id='outlined-largo'
 							label='Largo(m)'
+							defaultValue={material ? material[5] : ''}
 							size='small'
 							{...register('longitud_largo')}
 							helperText={errors.longitud_largo?.message}
 						/>
 						<TextField
 							className='m-3 shadow-lg'
-							type='number'
+							type='text'
 							id='outlined-costo'
 							label='Costo(CUP)'
+							defaultValue={material ? material[7] : ''}
 							size='small'
 							{...register('costo_total')}
 							helperText={errors.costo_total?.message}
@@ -150,7 +160,7 @@ function FormMateriales({ onCancel }: any) {
 							select
 							label='Color'
 							size='small'
-							defaultValue=''
+							defaultValue={material ? material[9] : ''}
 							{...register('color')}
 							helperText={errors.color?.message}
 						>
@@ -162,30 +172,15 @@ function FormMateriales({ onCancel }: any) {
 							type='number'
 							id='outlined-cantidad'
 							label='Cantidad'
+							defaultValue={material ? material[8] : ''}
 							size='small'
 							{...register('cantidad')}
 							helperText={errors.cantidad?.message}
 						/>
-
-						<Stack
-							className='justify-start ml-4 '
-							direction='row'
-							spacing={0.5}
-							alignItems='center'
-						>
-							<Typography className='m-2 text-zinc-700'>Calidad:</Typography>
-							<Typography className='italic pl-2'>Baja</Typography>
-							<Switch
-								id='calidad'
-								defaultChecked
-								{...register('calidad_material')}
-							/>
-							<Typography className='italic'>Alta</Typography>
-						</Stack>
 						<div></div>
 						<div className='flex pb-5 justify-end items-end pt-6 space-x-4'>
 							<SecondaryButton name='Cancelar' onClick={onCancel} />
-							<PrimaryButton name='Guardar' />
+							<PrimaryButton name={material ? 'Actualizar' : 'Guardar'} />
 						</div>
 					</form>
 				</div>
