@@ -24,7 +24,6 @@ import PrimaryButton from '@/components/utils/PrimaryButton';
 import FormMateriales from '../formMateriales/page';
 import AddIcon from '@mui/icons-material/Add';
 
-
 /**
  * Renders the "Materiales" component.
  *
@@ -132,10 +131,6 @@ function Materiales() {
 			name: 'longitud_largo',
 			label: 'Largo (m)',
 		},
-		// {
-		// 	name: 'calidad_material',
-		// 	label: 'Calidad',
-		// },
 		{
 			name: 'costo_total',
 			label: 'Costo Total',
@@ -154,7 +149,7 @@ function Materiales() {
 
 			options: {
 				filter: false,
-				customHeadRender: (columnMeta: any) => (
+				customHeadRender: (columnMeta: { index: React.Key }) => (
 					<th key={columnMeta.index} className='bg-teal-800 border-b'>
 						{columnMeta.index === columns.length - 1 ? (
 							<Tooltip title='Insertar Material' arrow>
