@@ -21,7 +21,7 @@ interface FormData {
 export async function GET(request: Request, { params }: any) {
 	try {
 		const result: Array<Object> = await conn.query(
-			'SELECT * FROM trabajos_realizados WHERE id = ?',
+			'SELECT * FROM ordenes WHERE id = ?',
 			[params.id],
 		);
 
@@ -47,10 +47,9 @@ export async function GET(request: Request, { params }: any) {
 
 export async function DELETE(request: Request, { params }: any) {
 	try {
-		const result: any = await conn.query(
-			'DELETE FROM trabajos_realizados WHERE id = ?',
-			[params.id],
-		);
+		const result: any = await conn.query('DELETE FROM ordenes WHERE id = ?', [
+			params.id,
+		]);
 		await conn.query(
 			'DELETE FROM materialestrabajosrealizados WHERE id_orden =?',
 			[params.id],
@@ -112,7 +111,7 @@ export async function PATCH(request: Request, { params }: any) {
 		const utilidad = precio - impRepres - onat - impEquip - costoTotal;
 
 		const result: any = await conn.query(
-			'UPDATE trabajos_realizados SET nombre = ?, descripcion = ?, pago_efectivo = ?, precio = ?, fecha = ?, otros_gastos_descripcion = ?, costo_otros_gastos = ?, impuesto_representacion = ?, impuesto_onat =?, impuesto_equipos = ?, costo_total = ?, utilidad=?, facturado = ?, entidad=?  WHERE id=?',
+			'UPDATE ordenes SET nombre = ?, descripcion = ?, pago_efectivo = ?, precio = ?, fecha = ?, otros_gastos_descripcion = ?, costo_otros_gastos = ?, impuesto_representacion = ?, impuesto_onat =?, impuesto_equipos = ?, costo_total = ?, utilidad=?, facturado = ?, entidad=?  WHERE id=?',
 			[
 				nombre,
 				descripcion,

@@ -3,20 +3,23 @@ import toast from 'react-hot-toast';
 import { AxiosResponse } from 'axios';
 import useHttpClient from '@/redux/services/http/httpClient';
 
-import {
-	deleteMaterial,
-	setMaterial,
-} from '@/redux/features/materiales/materialesSlice';
+import { deleteOrden, setOrden } from '@/redux/features/ordenes/ordenesSlice';
 
 type Inputs = {
-	longitud_ancho: string;
-	cantidad: string;
-	color: string;
-	costo_total: string;
-	descripcion: string;
-	espesor: string;
-	longitud_largo: string;
 	nombre: string;
+	descripcion: string;
+	pago_efectivo: string;
+	precio: string;
+	fecha: string;
+	otros_gastos_descripcion: string;
+	costo_otros_gastos: string;
+	impuesto_representacion: string;
+	impuesto_onat: string;
+	impuesto_equipos: string;
+	costo_total: string;
+	utilidad: string;
+	facturado: string;
+	entidad: string;
 };
 
 type Response = {
@@ -24,11 +27,11 @@ type Response = {
 };
 
 /**
- * CustomHook para los servicios de materiales.
+ * CustomHook para los servicios de ordenes.
  *
- * @returns Funciones de materiales.
+ * @returns Funciones de ordenes.
  */
-export default function useMateriales() {
+export default function useOrdenes() {
 	/*
 	 * ==========================
 	 * Definición de custom Hooks
@@ -52,36 +55,34 @@ export default function useMateriales() {
 	 */
 
 	/**
-	 * Metodo que consulta los materiales.
+	 * Metodo que consulta los ordenes.
 	 *
 	 */
 
-	const getMateriales = async () => {
+	const getOrdenes = async () => {
 		try {
-			const response = (await get('/materiales')) as AxiosResponse<Response>;
+			const response = (await get('/ordenes')) as AxiosResponse<Response>;
 			if (response.data) {
-				dispatch(setMaterial(response.data));
+				dispatch(setOrden(response.data));
 			}
 		} catch (error) {
-			throw new Error('Error durante la consulta de los materiales');
+			throw new Error('Error durante la consulta de las ordenes');
 		}
 	};
 
 	/**
-	 * Metodo que elimina un materiales mediante id.
+	 * Metodo que elimina una orden mediante id.
 	 *
 	 */
 
-	const deleteMaterialById = async (id: number) => {
+	const deleteOrdenById = async (id: number) => {
 		try {
-			const response = (await del(
-				`/materiales/${id}`,
-			)) as AxiosResponse<Response>;
+			const response = (await del(`/ordenes/${id}`)) as AxiosResponse<Response>;
 
 			if (response.data) {
-				dispatch(deleteMaterial(id));
+				dispatch(deleteOrden(id));
 
-				toast.success('El material se ha eliminado satisfactoriamente', {
+				toast.success('La orden se ha eliminado satisfactoriamente', {
 					duration: 2000,
 					position: 'top-right',
 				});
@@ -97,21 +98,21 @@ export default function useMateriales() {
 	};
 
 	/**
-	 * Metodo que crea un material.
+	 * Metodo que crea una orden.
 	 *
 	 */
 
-	const createMateriales = async (material: Inputs) => {
+	const createOrden = async (orden: Inputs) => {
 		try {
 			const response = (await post(
-				'/materiales',
-				material,
+				'/ordenes',
+				orden,
 			)) as AxiosResponse<Response>;
 
 			if (response.data) {
-				getMateriales();
+				getOrdenes();
 
-				toast.success('El material se ha creado satisfactoriamente', {
+				toast.success('La orden se ha creado satisfactoriamente', {
 					duration: 2000,
 					position: 'top-right',
 				});
@@ -122,26 +123,26 @@ export default function useMateriales() {
 				position: 'top-right',
 			});
 
-			throw new Error('Error al guardar el material');
+			throw new Error('Error al registrar la orden');
 		}
 	};
 
 	/**
-	 * Metodo que actualiza  un material por su id.
+	 * Metodo que actualiza  una orden por su id.
 	 *
 	 */
 
-	const updateMaterial = async (id: number, material: Inputs) => {
+	const updateOrden = async (id: number, orden: Inputs) => {
 		try {
 			const response = (await patch(
-				`/materiales/${id}`,
-				material,
+				`/ordenes/${id}`,
+				orden,
 			)) as AxiosResponse<Response>;
 
 			if (response.data) {
-				getMateriales();
+				getOrdenes();
 
-				toast.success('El material se ha actualizado satisfactoriamente', {
+				toast.success('La orden se ha actualizado satisfactoriamente', {
 					duration: 2000,
 					position: 'top-right',
 				});
@@ -152,14 +153,14 @@ export default function useMateriales() {
 				position: 'top-right',
 			});
 
-			throw new Error('Error al actualizar el material');
+			throw new Error('Error al actualizar la orden');
 		}
 	};
 
 	return {
-		getMateriales,
-		deleteMaterialById,
-		createMateriales,
-		updateMaterial,
+		getOrdenes,
+		deleteOrdenById,
+		createOrden,
+		updateOrden,
 	};
 }

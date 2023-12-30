@@ -19,9 +19,7 @@ interface FormData {
 }
 
 export async function GET() {
-	const result: Array<Object> = await conn.query(
-		'SELECT * FROM trabajos_realizados',
-	);
+	const result: Array<Object> = await conn.query('SELECT * FROM ordenes');
 	return NextResponse.json(result);
 }
 
@@ -62,7 +60,7 @@ export async function POST(req: Request) {
 			costoMateriales;
 
 		await conn.query(
-			'INSERT INTO trabajos_realizados ( nombre, descripcion, pago_efectivo, precio, fecha, otros_gastos_descripcion, costo_otros_gastos, impuesto_representacion, impuesto_onat, impuesto_equipos, costo_total, utilidad, facturado, entidad) VALUES ( ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)',
+			'INSERT INTO ordenes ( nombre, descripcion, pago_efectivo, precio, fecha, otros_gastos_descripcion, costo_otros_gastos, impuesto_representacion, impuesto_onat, impuesto_equipos, costo_total, utilidad, facturado, entidad) VALUES ( ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)',
 			[
 				nombre,
 				descripcion,

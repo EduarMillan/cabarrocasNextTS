@@ -5,18 +5,14 @@ interface Material {
 	id: number;
 	nombre: string;
 	descripcion: string;
-	pago_efectivo: number;
-	precio: number;
-	fecha: Date;
-	otros_gastos_descripcion: string;
-	costo_otros_gastos: number;
-	impuesto_representacion: number;
-	impuesto_onat: number;
-	impuesto_equipos: number;
+	espesor: number;
+	longitud_ancho: number;
+	longitud_largo: number;
 	costo_total: number;
-	utilidad: number;
-	facturado: number;
-	entidad: string;
+	costo_m2: number;
+	costo_ml: number;
+	cantidad: number;
+	color: string;
 }
 
 const initialState = {
