@@ -70,7 +70,7 @@ function ResponsiveAppBar() {
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
 					<AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-					<Link  href='/' passHref legacyBehavior>
+					<Link href='/' passHref legacyBehavior>
 						<Typography
 							variant='h6'
 							noWrap

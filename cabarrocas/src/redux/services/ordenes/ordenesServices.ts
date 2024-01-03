@@ -59,14 +59,19 @@ export default function useOrdenes() {
 	 *
 	 */
 
-	const getOrdenes = async () => {
+	const getOrdenes = async (): Promise<AxiosResponse<Response>> => {
 		try {
 			const response = (await get('/ordenes')) as AxiosResponse<Response>;
 			if (response.data) {
 				dispatch(setOrden(response.data));
 			}
+			return response;
 		} catch (error) {
-			throw new Error('Error durante la consulta de las ordenes');
+			toast.error('Error al obtener las órdenes', {
+				duration: 2000,
+				position: 'top-right',
+			});
+			throw error;
 		}
 	};
 

@@ -4,8 +4,8 @@ import { ordenesSlice } from '../features/ordenes/ordenesSlice';
 
 export const store = configureStore({
 	reducer: {
-		materiales: materialesSlice.reducer,
 		ordenes: ordenesSlice.reducer,
+		materiales: materialesSlice.reducer,
 	},
 });
 

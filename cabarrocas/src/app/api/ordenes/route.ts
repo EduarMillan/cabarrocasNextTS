@@ -19,7 +19,7 @@ interface FormData {
 }
 
 export async function GET() {
-	const result: Array<Object> = await conn.query('SELECT * FROM ordenes');
+	const result = await conn.query('SELECT * FROM ordenes');
 	return NextResponse.json(result);
 }
 
