@@ -30,8 +30,8 @@ const pages: Page[] = [
 		url: '/pages/materiales/dataMateriales',
 	},
 	{
-		name: 'Ordenes',
-		url: '/',
+		name: 'órdenes',
+		url: '/pages/ordenes/dataOrdenes',
 	},
 ];
 

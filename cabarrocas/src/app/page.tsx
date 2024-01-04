@@ -52,7 +52,7 @@ function Page() {
 	const contenedor = ordenes.length > 0 ? ordenes[0].ordenes : [];
 
 	return (
-		<div className='flex gap-2 mt-2'>
+		<div className='flex gap-1 mt-2'>
 			<GraficoCircularMedio data={contenedor} />
 			<TotalObras data={contenedor} />
 		</div>

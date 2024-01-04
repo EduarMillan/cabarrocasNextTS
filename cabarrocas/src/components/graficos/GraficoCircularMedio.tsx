@@ -155,9 +155,18 @@ export default function GraficoCircularMedio(
 		},
 		[setActiveIndex],
 	);
-
+	//'#040414'
 	return (
-		<Paper elevation={3} sx={{ m: 2, p: 3, background: '#040414' }}>
+		<Paper
+			elevation={3}
+			sx={{
+				m: 1,
+				p: 3,
+				background: 'transparent',
+				border: '2px solid #2C3E50',
+				borderRadius: '20px',
+			}}
+		>
 			<Typography className='text-xl text-blue-700 text-center font-light'>
 				{' '}
 				TRABAJOS POR ENTIDADES

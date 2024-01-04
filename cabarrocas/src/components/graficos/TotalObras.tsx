@@ -33,7 +33,7 @@ const importMaterialUI = async () => {
 	return mui;
 };
 
-function TabPanel(props: TabPanelProps) {
+function TabPanel(props: Readonly<TabPanelProps>) {
 	const [mui, setMui] = useState<any>(null);
 	const { children, value, index, ...other } = props;
 
@@ -50,7 +50,7 @@ function TabPanel(props: TabPanelProps) {
 		return null;
 	}
 
-	const { Box, Typography } = mui;
+	const { Box } = mui;
 
 	return (
 		<div
@@ -137,7 +137,16 @@ export default function VerticalTabs(props: Readonly<{ data: Orden[] }>) {
 	const { Box, Paper, Typography, Tab, Tabs } = mui;
 
 	return (
-		<Paper elevation={3} sx={{ m: 2, p: 3, background: '#040414' }}>
+		<Paper
+			elevation={3}
+			sx={{
+				m: 1,
+				p: 3,
+				background: 'transparent',
+				border: '2px solid #2C3E50',
+				borderRadius: '20px',
+			}}
+		>
 			<Box
 				sx={{
 					display: 'flex',
@@ -188,9 +197,15 @@ export default function VerticalTabs(props: Readonly<{ data: Orden[] }>) {
 									opacity: 0.3,
 									ml: 5,
 									mt: 5,
+									color: '#FFFFFF',
 								}}
 							/>
-							<Typography variant='h4' marginLeft={5} marginTop={5}>
+							<Typography
+								variant='h4'
+								marginLeft={5}
+								marginTop={5}
+								color='grey'
+							>
 								{trabajosAnnoActual}
 							</Typography>
 						</Box>
@@ -213,9 +228,15 @@ export default function VerticalTabs(props: Readonly<{ data: Orden[] }>) {
 									opacity: 0.3,
 									ml: 5,
 									mt: 5,
+									color: '#FFFFFF',
 								}}
 							/>
-							<Typography variant='h4' marginLeft={5} marginTop={5}>
+							<Typography
+								variant='h4'
+								marginLeft={5}
+								marginTop={5}
+								color='grey'
+							>
 								{trabajosAnnoPasado}
 							</Typography>
 						</Box>
@@ -238,9 +259,15 @@ export default function VerticalTabs(props: Readonly<{ data: Orden[] }>) {
 									opacity: 0.3,
 									ml: 5,
 									mt: 5,
+									color: '#FFFFFF',
 								}}
 							/>
-							<Typography variant='h4' marginLeft={5} marginTop={5}>
+							<Typography
+								variant='h4'
+								marginLeft={5}
+								marginTop={5}
+								color='grey'
+							>
 								{trabajosRealizados.length}
 							</Typography>
 						</Box>
