@@ -87,7 +87,7 @@ const renderActiveShape = (props: any) => {
 				textAnchor={textAnchor}
 				fill='#99FF33'
 			>
-				{` ${value} CUP`}
+				{` ${value.toFixed(2)} CUP`}
 			</text>
 			<text
 				x={ex + (cos >= 0 ? 1 : -1) * 12}
@@ -110,21 +110,17 @@ export default function GraficoCircularMedio(
 	const [sumaOtros, setSumaOtros] = useState(0);
 
 	const data = [
-		{ name: 'Ofic. Hist.', value: sumaOficina, fill: '#0099FF' },
-		{ name: 'Emp. Estatales', value: sumaEstatales, fill: '#FF7200' },
-		{ name: 'Efectivo', value: sumaOtros, fill: '#FFCC02' },
+		{ name: 'OHCH', value: sumaOficina, fill: '#0099FF' },
+		{ name: 'Empresas', value: sumaEstatales, fill: '#FF7200' },
+		{ name: 'Particulares', value: sumaOtros, fill: '#FFCC02' },
 	];
 
 	const loadingDatos = () => {
 		const contenedor: Array<Orden> = props.data;
 
-		const oficiHistoriador = contenedor.filter(
-			x => x.entidad === 'oficinadelhistoriador',
-		);
-		const estatales = contenedor.filter(
-			x => x.entidad === 'entidadesestatales',
-		);
-		const otros = contenedor.filter(x => x.entidad === 'otros');
+		const oficiHistoriador = contenedor.filter(x => x.entidad === 'OHCH');
+		const estatales = contenedor.filter(x => x.entidad === 'Empresas');
+		const otros = contenedor.filter(x => x.entidad === 'Particulares');
 
 		const sumOficina = oficiHistoriador.reduce(
 			(accumulator, item) => accumulator + item.precio,

@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import useOrdenes from '@/redux/services/ordenes/ordenesServices';
-import { selectMateriales } from '@/redux/features/materiales/materialesSlice';
+import { selectOrdenes } from '@/redux/features/ordenes/ordenesSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import CustomModal from '@/components/utils/CustomModal';
@@ -23,12 +23,28 @@ import SecondaryButton from '@/components/utils/SecondaryButton';
 import PrimaryButton from '@/components/utils/PrimaryButton';
 import FormOrdenes from '../formOrdenes/page';
 import AddIcon from '@mui/icons-material/Add';
-import { selectOrdenes } from '@/redux/features/ordenes/ordenesSlice';
+
+type Orden = {
+	nombre: string;
+	descripcion: string;
+	pago_efectivo: number;
+	precio: number;
+	fecha: Date;
+	otros_gastos_descripcion: string;
+	costo_otros_gastos: number;
+	impuesto_representacion: number;
+	impuesto_onat: number;
+	impuesto_equipos: number;
+	costo_total: number;
+	utilidad: number;
+	facturado: number;
+	entidad: string;
+};
 
 /**
- * Renders the "Materiales" component.
+ * Renders the "Ordenes" component.
  *
- * @return {JSX.Element} The rendered "Materiales" component.
+ * @return {JSX.Element} The rendered "Ordenes" component.
  */
 function Ordenes() {
 	const getMuiTheme = () =>
@@ -104,8 +120,12 @@ function Ordenes() {
 		getOrdenes();
 	}, []);
 
-	const ordenes =
-		ordenesState.length > 0 ? ordenesState[0].ordenes : [];
+	const ordenes = ordenesState.length > 0 ? ordenesState[0].ordenes : [];
+
+	const transformOrden = ordenes.map((orden: Orden) => ({
+		...orden,
+		pago_efectivo: orden.pago_efectivo === 1 ? 'Efectivo' : 'Contrato',
+	}));
 
 	const columns = [
 		{
@@ -124,7 +144,7 @@ function Ordenes() {
 			name: 'pago_efectivo',
 			label: 'Tipo de Pago',
 		},
-        {
+		{
 			name: 'fecha',
 			label: 'Fecha',
 		},
@@ -144,15 +164,15 @@ function Ordenes() {
 			name: 'impuesto_onat',
 			label: 'ONAT',
 		},
-        {
+		{
 			name: 'impuesto_equipos',
 			label: 'Imp. Equipos',
 		},
-        {
+		{
 			name: 'utilidad',
 			label: 'Utilidad',
 		},
-        {
+		{
 			name: 'entidad',
 			label: 'Entidad',
 		},
@@ -188,7 +208,10 @@ function Ordenes() {
 								aria-label='Editar'
 								style={{ color: '#ca8a04' }}
 								onClick={() => {
-									setUpdateOrden(tableMeta.rowData);
+									const found = ordenes.find(
+										(orden: any) => orden.id === tableMeta.rowData[0],
+									);
+									setUpdateOrden(found);
 									setCrearOrden(true);
 									setOpenModal(true);
 								}}
@@ -264,9 +287,7 @@ function Ordenes() {
 
 	let modalContent;
 	if (crearOrden) {
-		modalContent = (
-			<FormOrdenes /*onCancel={handleCancel} material={updateMaterial}*/ />
-		);
+		modalContent = <FormOrdenes onCancel={handleCancel} orden={updateOrden} />;
 	} else if (eliminarOrden) {
 		modalContent = (
 			<div>
@@ -301,7 +322,7 @@ function Ordenes() {
 			<ThemeProvider theme={getMuiTheme()}>
 				<MUIDataTable
 					title='Ordenes de Producción Terminadas'
-					data={ordenes}
+					data={transformOrden}
 					columns={columns}
 					options={options}
 				/>

@@ -180,17 +180,19 @@ export default function GraficoObras(props: Readonly<{ data: Orden[] }>) {
 			</div>
 			<div>
 				<div className='flex text-red-500 text-sm justify-center'>
-					<div className='ml-4'>Prom. Trabajos:</div>
-					<div className='ml-2'>{aveG}</div>{' '}	
+					<div className='ml-5'>Prom. Trabajos:</div>
+					<div className='ml-2'>{aveG}</div>{' '}
 				</div>
 				<div className='flex text-green-500 text-sm justify-center'>
-					<div className='ml-3'>Trabajos {moment().year() - 1}:</div> <div className='ml-2'>{aveProfitLY}</div>
+					<div className='ml-3'>Trabajos {moment().year() - 1}:</div>{' '}
+					<div className='ml-2'>{aveProfitLY}</div>
 				</div>
 				<div className='flex text-blue-500 text-sm justify-center'>
-					<div className='ml-7'>Trabajos {moment().year() - 2}:</div> <div className='ml-2'>{aveProfitBLY}</div>
+					<div className='ml-7'>Trabajos {moment().year() - 2}:</div>{' '}
+					<div className='ml-2'>{aveProfitBLY}</div>
 				</div>
 				<div className='flex text-yellow-500 text-sm justify-center'>
-					<div className='ml-12'>Año Actual:</div>
+					<div className='ml-11'>Año Actual:</div>
 					<div className='ml-2'>{value}</div>{' '}
 				</div>
 			</div>
