@@ -7,6 +7,7 @@ import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
 import useOrdenes from '@/redux/services/ordenes/ordenesServices';
 import { ordenSchema, mappedEntidad } from '@/validations/OrdenesSchema';
+import moment from 'moment';
 
 type Inputs = {
 	nombre: string;
@@ -32,6 +33,9 @@ type Inputs = {
  */
 function FormOrdenes({ onCancel, orden }: any) {
 	const { createOrden, updateOrden } = useOrdenes();
+
+	const fechaActual = new Date();
+	const fechaActualFormat = fechaActual.toISOString().slice(0, 16);
 
 	const {
 		register,
@@ -64,7 +68,6 @@ function FormOrdenes({ onCancel, orden }: any) {
 			setValue('utilidad', orden.utilidad);
 			setValue('facturado', orden.facturado);
 			setValue('entidad', orden.entidad);
-			console.log(orden);
 		}
 	}, [setValue, orden]);
 
@@ -134,13 +137,15 @@ function FormOrdenes({ onCancel, orden }: any) {
 						/>
 						<TextField
 							className='m-3 shadow-lg'
-							type='date'
+							type='datetime-local'
 							id='orden_fecha'
 							label='Fecha'
-							defaultValue={orden ? orden.fecha : ''}
+							defaultValue={
+								orden
+									? moment(orden.fecha).format('YYYY-MM-DDTHH:mm')
+									: fechaActualFormat
+							}
 							size='small'
-							{...register('fecha')}
-							helperText={errors.fecha?.message}
 						/>
 
 						<TextField

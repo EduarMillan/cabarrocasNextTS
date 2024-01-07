@@ -87,9 +87,4 @@ export const ordenSchema = z.object({
 		.refine(espesor => parseFloat(espesor) > 0, {
 			message: 'El grosor debe ser mayor que 0',
 		}),
-	fecha: z
-		.string()
-		.refine(fecha => new Date(fecha).toString() !== 'Invalid Date', {
-			message: 'La fecha debe de ser válida',
-		}),
 });

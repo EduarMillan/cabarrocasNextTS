@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import MUIDataTable, {
 	MUIDataTableColumn,
 	MUIDataTableOptions,
@@ -125,6 +126,7 @@ function Ordenes() {
 	const transformOrden = ordenes.map((orden: Orden) => ({
 		...orden,
 		pago_efectivo: orden.pago_efectivo === 1 ? 'Efectivo' : 'Contrato',
+		fecha: moment(orden.fecha).format('YYYY-MM-DD'),
 	}));
 
 	const columns = [
@@ -318,7 +320,7 @@ function Ordenes() {
 	}
 
 	return (
-		<div className='container my-10 mx-auto bg-slate-500'>
+		<div className='container my-5 mx-auto bg-slate-500'>
 			<ThemeProvider theme={getMuiTheme()}>
 				<MUIDataTable
 					title='Ordenes de Producción Terminadas'
