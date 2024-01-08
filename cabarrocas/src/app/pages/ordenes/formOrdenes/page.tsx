@@ -7,7 +7,10 @@ import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
 import useOrdenes from '@/redux/services/ordenes/ordenesServices';
 import { ordenSchema, mappedEntidad } from '@/validations/OrdenesSchema';
-import moment from 'moment';
+import Switch from '@mui/material/Switch';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 type Inputs = {
 	nombre: string;
@@ -25,6 +28,11 @@ type Inputs = {
 	facturado: string;
 	entidad: string;
 };
+
+interface Estado {
+	efectivo: boolean;
+	facturado: boolean;
+}
 
 /**
  * Renders a form for selecting ordenes and their properties.
@@ -52,13 +60,25 @@ function FormOrdenes({ onCancel, orden }: any) {
 		</MenuItem>
 	));
 
+	const [state, setState] = React.useState<Estado>({
+		efectivo: true,
+		facturado: true,
+	});
+
+	const handleChange = (name: keyof Estado) => {
+		setState(prevState => ({
+			...prevState,
+			[name]: !prevState[name],
+		}));
+	};
+
 	useEffect(() => {
 		if (orden) {
 			setValue('nombre', orden.nombre);
 			setValue('descripcion', orden.descripcion);
 			setValue('pago_efectivo', orden.pago_efectivo);
 			setValue('precio', orden.precio);
-			setValue('fecha', orden.fecha);
+			setValue('fecha', orden.fecha.slice(0, 16));
 			setValue('otros_gastos_descripcion', orden.otros_gastos_descripcion);
 			setValue('costo_otros_gastos', orden.costo_otros_gastos);
 			setValue('impuesto_representacion', orden.impuesto_representacion);
@@ -86,10 +106,14 @@ function FormOrdenes({ onCancel, orden }: any) {
 				<div className='bg-slate-900  rounded-md px-10 flex items-center justify-center p-2 mb-1 bg-gradient-to-r from-blue-900 to-blue-400'>
 					<p className='text-slate-50 font-normal '>Formulario de Ordenes</p>
 				</div>
+				<div className='bg-zinc-500  rounded-md px-10 shadow-lg mb-1 bg-gradient-to-r from-slate-400 to-slate-100'>
+					aqui van los otros datos
+				</div>
 				<div className='bg-zinc-500  rounded-md px-10 shadow-lg bg-gradient-to-r from-slate-400 to-slate-100'>
 					<form
-						className='grid grid-cols-2 gap-2 text-black pt-4 shadow-lg'
-						onSubmit={handleSubmit(saveOrden)}
+						className='grid grid-cols-6 gap-1 text-black pt-4 shadow-lg'
+						//onSubmit={handleSubmit(saveOrden)}
+						onSubmit={handleSubmit(data => console.log(data))}
 					>
 						<TextField
 							className='m-3 shadow-lg text-sm'
@@ -115,17 +139,6 @@ function FormOrdenes({ onCancel, orden }: any) {
 						/>
 
 						<TextField
-							className='m-3 shadow-lg text-sm'
-							type='text'
-							id='orden_pago_efectivo'
-							label='Tipo de Pago'
-							defaultValue={orden ? orden.pago_efectivo : ''}
-							size='small'
-							{...register('pago_efectivo')}
-							helperText={errors.pago_efectivo?.message}
-						/>
-
-						<TextField
 							className='m-3 shadow-lg'
 							type='text'
 							id='orden_precio'
@@ -135,17 +148,18 @@ function FormOrdenes({ onCancel, orden }: any) {
 							{...register('precio')}
 							helperText={errors.precio?.message}
 						/>
+
 						<TextField
 							className='m-3 shadow-lg'
 							type='datetime-local'
 							id='orden_fecha'
 							label='Fecha'
 							defaultValue={
-								orden
-									? moment(orden.fecha).format('YYYY-MM-DDTHH:mm')
-									: fechaActualFormat
+								orden ? orden.fecha.slice(0, 16) : fechaActualFormat
 							}
 							size='small'
+							{...register('fecha')}
+							helperText={errors.fecha?.message}
 						/>
 
 						<TextField
@@ -160,6 +174,96 @@ function FormOrdenes({ onCancel, orden }: any) {
 						>
 							{entidadOptions}
 						</TextField>
+
+						<TextField
+							className='m-3 shadow-lg text-sm '
+							type='text'
+							id='orden_gastos_descripcion'
+							label='Descrip. de otros gastos'
+							multiline={true}
+							defaultValue={orden ? orden.orden_gastos_descripcion : ''}
+							size='small'
+							{...register('otros_gastos_descripcion')}
+							helperText={errors.otros_gastos_descripcion?.message}
+						/>
+
+						<TextField
+							className='m-3 shadow-lg'
+							type='text'
+							id='otros_gastos'
+							label='Otros Gastos(CUP)'
+							defaultValue={orden ? orden.otros_gastos : ''}
+							size='small'
+							{...register('costo_otros_gastos')}
+							helperText={errors.costo_otros_gastos?.message}
+						/>
+
+						<TextField
+							className='m-3 shadow-lg'
+							type='text'
+							id='imp_rep'
+							label='Imp. Repres.(CUP)'
+							defaultValue={orden ? orden.impuesto_representacion : ''}
+							size='small'
+							{...register('impuesto_representacion')}
+							helperText={errors.impuesto_representacion?.message}
+						/>
+
+						<TextField
+							className='m-3 shadow-lg'
+							type='text'
+							id='onat'
+							label='Imp. ONAT(CUP)'
+							defaultValue={orden ? orden.impuesto_onat : ''}
+							size='small'
+							{...register('impuesto_onat')}
+							helperText={errors.impuesto_onat?.message}
+						/>
+
+						<TextField
+							className='m-3 shadow-lg'
+							type='text'
+							id='onat'
+							label='Imp. Equipos(CUP)'
+							defaultValue={orden ? orden.impuesto_equipos : ''}
+							size='small'
+							{...register('impuesto_equipos')}
+							helperText={errors.impuesto_equipos?.message}
+						/>
+
+						<div className='ml-3'>
+							<FormControl component='fieldset' variant='standard'>
+								<FormLabel component='legend'>Tipo de Pago </FormLabel>
+
+								<FormControlLabel
+									control={
+										<Switch
+											checked={state.efectivo}
+											onClick={() => handleChange('efectivo')}
+											{...register('pago_efectivo')}
+										/>
+									}
+									label='Efectivo'
+								/>
+							</FormControl>
+						</div>
+
+						<div className='ml-3'>
+							<FormControl component='fieldset' variant='standard'>
+								<FormLabel component='legend'>Facturación </FormLabel>
+
+								<FormControlLabel
+									control={
+										<Switch
+											checked={state.facturado}
+											onClick={() => handleChange('facturado')}
+											{...register('facturado')}
+										/>
+									}
+									label='Facturado'
+								/>
+							</FormControl>
+						</div>
 
 						<div className='flex pb-5 justify-end items-end pt-6 space-x-4'>
 							<SecondaryButton name='Cancelar' onClick={onCancel} />

@@ -328,7 +328,7 @@ function Ordenes() {
 					columns={columns}
 					options={options}
 				/>
-				<CustomModal open={openModal} width='md'>
+				<CustomModal open={openModal} width='xl'>
 					{modalContent}
 				</CustomModal>
 			</ThemeProvider>

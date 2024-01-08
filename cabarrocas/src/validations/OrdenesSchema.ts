@@ -66,25 +66,28 @@ export const ordenSchema = z.object({
 		.refine(impuesto_equipos => !isNaN(parseFloat(impuesto_equipos)), {
 			message: 'El impuesto debe ser un número',
 		}),
-	costo_total: z
-		.string()
-		.refine(costo_total => !isNaN(parseFloat(costo_total)), {
-			message: 'El Costo debe ser un número',
-		}),
-	utilidad: z.string().refine(utilidad => !isNaN(parseFloat(utilidad)), {
-		message: 'La utilidad debe ser un número',
-	}),
+	// costo_total: z
+	// 	.string()
+	// 	.refine(costo_total => !isNaN(parseFloat(costo_total)), {
+	// 		message: 'El Costo debe ser un número',
+	// 	}),
+	// utilidad: z.string().refine(utilidad => !isNaN(parseFloat(utilidad)), {
+	// 	message: 'La utilidad debe ser un número',
+	// }),
 	entidad: z.enum(entidad, {
 		errorMap: () => ({
 			message: 'Seleccione una entidad de la lista.',
 		}),
 	}),
-	espesor: z
-		.string()
-		.refine(espesor => !isNaN(parseFloat(espesor)), {
-			message: 'El grosor debe ser un número',
-		})
-		.refine(espesor => parseFloat(espesor) > 0, {
-			message: 'El grosor debe ser mayor que 0',
-		}),
+	fecha: z.string().refine(
+		fecha => {
+			const parsedDate = new Date(fecha);
+			return !isNaN(parsedDate.getTime());
+		},
+		{
+			message: 'La fecha debe ser válida',
+		},
+	),
+	pago_efectivo: z.boolean(),
+	facturado: z.boolean(),
 });
