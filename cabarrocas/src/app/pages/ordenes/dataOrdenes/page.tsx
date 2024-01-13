@@ -126,7 +126,7 @@ function Ordenes() {
 	const transformOrden = ordenes.map((orden: Orden) => ({
 		...orden,
 		pago_efectivo: orden.pago_efectivo === 1 ? 'Efectivo' : 'Contrato',
-		fecha: moment(orden.fecha).format('YYYY-MM-DD'),
+		fecha: moment(orden.fecha).format('YYYY/MM/DD'),
 	}));
 
 	const columns = [
@@ -151,12 +151,8 @@ function Ordenes() {
 			label: 'Fecha',
 		},
 		{
-			name: 'precio',
-			label: 'Precio',
-		},
-		{
-			name: 'costo_total',
-			label: 'Costo Total',
+			name: 'entidad',
+			label: 'Entidad',
 		},
 		{
 			name: 'impuesto_representacion',
@@ -175,9 +171,14 @@ function Ordenes() {
 			label: 'Utilidad',
 		},
 		{
-			name: 'entidad',
-			label: 'Entidad',
+			name: 'costo_total',
+			label: 'Costo Total',
 		},
+		{
+			name: 'precio',
+			label: 'Precio',
+		},
+
 		{
 			name: 'acciones',
 			label: 'Acciones',

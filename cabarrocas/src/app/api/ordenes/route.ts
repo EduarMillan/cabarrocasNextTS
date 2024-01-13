@@ -4,17 +4,17 @@ import { conn } from '@/libs/mysql';
 interface FormData {
 	nombre: string;
 	descripcion: string;
-	pago_efectivo: number;
-	precio: number;
-	fecha: Date;
+	pago_efectivo: string;
+	precio: string;
+	fecha: string;
 	otros_gastos_descripcion: string;
-	costo_otros_gastos: number;
-	impuesto_representacion: number;
-	impuesto_onat: number;
-	impuesto_equipos: number;
-	costo_total: number;
-	utilidad: number;
-	facturado: number;
+	costo_otros_gastos: string;
+	impuesto_representacion: string;
+	impuesto_onat: string;
+	impuesto_equipos: string;
+	costo_total: string;
+	utilidad: string;
+	facturado: string;
 	entidad: string;
 }
 
@@ -35,46 +35,65 @@ export async function POST(req: Request) {
 			costo_otros_gastos,
 			facturado,
 			entidad,
+			costo_total,
 		}: FormData = await req.json();
+		console.log(pago_efectivo);
+		const precio_num = parseFloat(precio);
+		const costo_otros_gastos_num = parseFloat(costo_otros_gastos);
+		const costo_total_num = parseFloat(costo_total);
 
-		const costoMateriales = 0;
 		let impRepres: number;
 		let onat: number;
+		let efectivo;
+		let facturado_bool;
 
-		if (pago_efectivo === 1) {
+		if (facturado) {
+			facturado_bool = 1;
+		} else {
+			facturado_bool = 0;
+		}
+
+		if (pago_efectivo) {
 			impRepres = 0;
 			onat = 0;
+			efectivo = 1;
 		} else {
-			impRepres = precio * 0.11;
-			onat = (precio - impRepres) * 0.35;
+			impRepres = precio_num * 0.11;
+			onat = (precio_num - impRepres) * 0.35;
+			efectivo = 0;
 		}
 
 		const impEquipos: number =
-			(precio - impRepres - onat - costo_otros_gastos - costoMateriales) * 0.1;
+			(precio_num -
+				impRepres -
+				onat -
+				costo_otros_gastos_num -
+				costo_total_num) *
+			0.1;
 		const utilidad: number =
-			precio -
+			precio_num -
 			impRepres -
 			onat -
 			impEquipos -
-			costo_otros_gastos -
-			costoMateriales;
+			costo_otros_gastos_num -
+			costo_total_num;
 
 		await conn.query(
 			'INSERT INTO ordenes ( nombre, descripcion, pago_efectivo, precio, fecha, otros_gastos_descripcion, costo_otros_gastos, impuesto_representacion, impuesto_onat, impuesto_equipos, costo_total, utilidad, facturado, entidad) VALUES ( ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)',
 			[
 				nombre,
 				descripcion,
-				pago_efectivo,
-				precio,
+				efectivo,
+				precio_num,
 				fecha,
 				otros_gastos_descripcion,
-				costo_otros_gastos,
+				costo_otros_gastos_num,
 				impRepres,
 				onat,
 				impEquipos,
-				costoMateriales,
+				costo_total_num,
 				utilidad,
-				facturado,
+				facturado_bool,
 				entidad,
 			],
 		);

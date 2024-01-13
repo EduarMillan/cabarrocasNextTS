@@ -14,7 +14,6 @@ import {
 
 type Inputs = {
 	longitud_ancho: string;
-	//calidad_material: string;
 	cantidad: string;
 	color: string;
 	costo_total: string;
@@ -83,9 +82,9 @@ function FormMateriales({ onCancel, material }: any) {
 				<div className='bg-slate-900  rounded-md px-10 flex items-center justify-center p-2 mb-1 bg-gradient-to-r from-blue-900 to-blue-400'>
 					<p className='text-slate-50 font-normal '>Formulario de Materiales</p>
 				</div>
-				<div className='bg-zinc-500  rounded-md px-10 shadow-lg bg-gradient-to-r from-slate-400 to-slate-100'>
+				<div className='bg-zinc-500  rounded-md px-10 shadow-lg bg-gradient-to-r from-slate-200 to-slate-100'>
 					<form
-						className='grid grid-cols-2 gap-2 text-black pt-4 shadow-lg'
+						className='grid grid-cols-2 gap-2 text-black pt-4 '
 						onSubmit={handleSubmit(saveMaterials)}
 					>
 						<TextField
@@ -100,6 +99,7 @@ function FormMateriales({ onCancel, material }: any) {
 						>
 							{materialOptions}
 						</TextField>
+
 						<TextField
 							className='m-3 shadow-lg text-sm '
 							type='text'
@@ -133,6 +133,7 @@ function FormMateriales({ onCancel, material }: any) {
 							{...register('longitud_ancho')}
 							helperText={errors.longitud_ancho?.message}
 						/>
+
 						<TextField
 							className='m-3 shadow-lg'
 							type='text'
@@ -142,16 +143,6 @@ function FormMateriales({ onCancel, material }: any) {
 							size='small'
 							{...register('longitud_largo')}
 							helperText={errors.longitud_largo?.message}
-						/>
-						<TextField
-							className='m-3 shadow-lg'
-							type='text'
-							id='outlined-costo'
-							label='Costo(CUP)'
-							defaultValue={material ? material[7] : ''}
-							size='small'
-							{...register('costo_total')}
-							helperText={errors.costo_total?.message}
 						/>
 
 						<TextField
@@ -166,6 +157,17 @@ function FormMateriales({ onCancel, material }: any) {
 						>
 							{colorOptions}
 						</TextField>
+
+						<TextField
+							className='m-3 shadow-lg'
+							type='text'
+							id='outlined-costo'
+							label='Costo(CUP)'
+							defaultValue={material ? material[7] : ''}
+							size='small'
+							{...register('costo_total')}
+							helperText={errors.costo_total?.message}
+						/>
 
 						<TextField
 							className='m-3 shadow-lg'

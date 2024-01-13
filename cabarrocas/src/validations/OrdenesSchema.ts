@@ -32,8 +32,8 @@ export const ordenSchema = z.object({
 		.refine(precio => !isNaN(parseFloat(precio)), {
 			message: 'El precio debe ser un número',
 		})
-		.refine(longitud_ancho => parseFloat(longitud_ancho) > 0, {
-			message: 'El ancho debe ser mayor que 0',
+		.refine(precio => parseFloat(precio) > 0, {
+			message: 'El precio debe ser mayor que 0',
 		}),
 	otros_gastos_descripcion: z
 		.string()
@@ -48,32 +48,11 @@ export const ordenSchema = z.object({
 		.refine(costo_otros_gastos => !isNaN(parseFloat(costo_otros_gastos)), {
 			message: 'El costo debe ser un número',
 		}),
-	impuesto_representacion: z
-		.string()
-		.refine(
-			impuesto_representacion => !isNaN(parseFloat(impuesto_representacion)),
-			{
-				message: 'El impuesto debe ser un número',
-			},
-		),
-	impuesto_onat: z
-		.string()
-		.refine(impuesto_onat => !isNaN(parseFloat(impuesto_onat)), {
-			message: 'El impuesto debe ser un número',
-		}),
-	impuesto_equipos: z
-		.string()
-		.refine(impuesto_equipos => !isNaN(parseFloat(impuesto_equipos)), {
-			message: 'El impuesto debe ser un número',
-		}),
-	// costo_total: z
-	// 	.string()
-	// 	.refine(costo_total => !isNaN(parseFloat(costo_total)), {
-	// 		message: 'El Costo debe ser un número',
-	// 	}),
-	// utilidad: z.string().refine(utilidad => !isNaN(parseFloat(utilidad)), {
-	// 	message: 'La utilidad debe ser un número',
-	// }),
+	impuesto_representacion: z.string(),
+	impuesto_onat: z.string(),
+	impuesto_equipos: z.string(),
+	costo_total: z.string(),
+	utilidad: z.string(),
 	entidad: z.enum(entidad, {
 		errorMap: () => ({
 			message: 'Seleccione una entidad de la lista.',

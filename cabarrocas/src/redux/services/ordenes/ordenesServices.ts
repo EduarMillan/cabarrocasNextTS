@@ -8,7 +8,7 @@ import { deleteOrden, setOrden } from '@/redux/features/ordenes/ordenesSlice';
 type Inputs = {
 	nombre: string;
 	descripcion: string;
-	pago_efectivo: string;
+	pago_efectivo: boolean;
 	precio: string;
 	fecha: string;
 	otros_gastos_descripcion: string;
@@ -18,7 +18,7 @@ type Inputs = {
 	impuesto_equipos: string;
 	costo_total: string;
 	utilidad: string;
-	facturado: string;
+	facturado: boolean;
 	entidad: string;
 };
 
