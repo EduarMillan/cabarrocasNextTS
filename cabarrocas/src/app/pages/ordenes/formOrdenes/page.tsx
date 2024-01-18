@@ -11,6 +11,7 @@ import Switch from '@mui/material/Switch';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import DataTableMaterialesOrdenes from '@/app/pages/materialesOrdenes/dataMaterialesOrdenes/page';
 
 type Inputs = {
 	nombre: string;
@@ -104,10 +105,10 @@ function FormOrdenes({ onCancel, orden }: any) {
 	};
 
 	return (
-		<div className='flex items-center justify-center m-1 '>
+		<div className='grid items-center justify-center m-1 grid-cols-1 w-full'>
 			<div>
-				<div className='bg-slate-900  rounded-md px-10 flex items-center justify-center p-2 mb-1 bg-gradient-to-r from-blue-900 to-blue-400'>
-					<p className='text-slate-50 font-normal '>Formulario de Ordenes</p>
+				<div className='bg-emerald-950   px-10 flex items-center justify-start p-2 mb-1'>
+					<p className='text-slate-50  text-xl'>Formulario de Ordenes</p>
 				</div>
 
 				<div className='bg-zinc-500  rounded-md px-5 shadow-lg bg-gradient-to-r from-slate-200 to-slate-100'>
@@ -324,6 +325,9 @@ function FormOrdenes({ onCancel, orden }: any) {
 						</div>
 					</form>
 				</div>
+			</div>
+			<div>
+				<DataTableMaterialesOrdenes />
 			</div>
 		</div>
 	);

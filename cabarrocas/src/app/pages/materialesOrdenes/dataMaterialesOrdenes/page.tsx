@@ -14,30 +14,29 @@ import {
 	IconButton,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import useMateriales from '@/redux/services/materiales/materialesService';
-import { selectMateriales } from '@/redux/features/materiales/materialesSlice';
+import useMaterialesOrdenes from '@/redux/services/materialesOrdenes/materialesOrdenesService';
+import { selectMaterialesOrdenes } from '@/redux/features/materialesOrdenes/materialesOrdenesSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import CustomModal from '@/components/utils/CustomModal';
 import SecondaryButton from '@/components/utils/SecondaryButton';
 import PrimaryButton from '@/components/utils/PrimaryButton';
-import FormMateriales from '../formMateriales/page';
+import FormMaterialesOrdenes from '../formMaterialesOrdenes/page';
 import AddIcon from '@mui/icons-material/Add';
 
 /**
- * Renders the "Materiales" component.
+ * Renders the "MaterialesOrdenes" component.
  *
- * @return {JSX.Element} The rendered "Materiales" component.
+ * @return {JSX.Element} The rendered "MaterialesOrdenes" component.
  */
-function DataTableMateriales() {
+function DataTableMaterialesOrdenes(/*id_orden?: number*/) {
 	const getMuiTheme = () =>
 		createTheme({
 			components: {
 				MUIDataTableBodyCell: {
 					styleOverrides: {
 						root: {
-							backgroundColor: '#09131A',
-							color: '#ffffff',
+							color: '#000000',
 							fontSize: '12px',
 							padding: '5px',
 						},
@@ -56,8 +55,11 @@ function DataTableMateriales() {
 				MUIDataTableToolbar: {
 					styleOverrides: {
 						root: {
-							backgroundColor: '#09131A',
+							backgroundColor: '#022c22',
 							color: '#ffffff',
+							height: '40px',
+							padding: '5 5 5 5',
+							minHeight: '10px',
 						},
 						icon: {
 							color: '#ffffff',
@@ -82,8 +84,9 @@ function DataTableMateriales() {
 			},
 		});
 
-	const { getMateriales, deleteMaterialById } = useMateriales();
-	const materialesState = useSelector(selectMateriales);
+	const { getMaterialesOrdenes, deleteMaterialOrdenById } =
+		useMaterialesOrdenes();
+	const materialesOrdenesState = useSelector(selectMaterialesOrdenes);
 	const [openModal, setOpenModal] = useState(false);
 	const [crearMaterial, setCrearMaterial] = useState(false);
 	const [eliminarMaterial, setEliminarMaterial] = useState(false);
@@ -91,7 +94,7 @@ function DataTableMateriales() {
 	const [updateMaterial, setUpdateMaterial] = useState(null);
 
 	const deleteMaterialId = () => {
-		deleteMaterialById(idMaterial);
+		deleteMaterialOrdenById(idMaterial);
 	};
 
 	const handleCancel = () => {
@@ -100,11 +103,13 @@ function DataTableMateriales() {
 	};
 
 	useEffect(() => {
-		getMateriales();
+		getMaterialesOrdenes();
 	}, []);
 
-	const materiales =
-		materialesState.length > 0 ? materialesState[0].materiales : [];
+	const materialesOrdenes =
+		materialesOrdenesState.length > 0
+			? materialesOrdenesState[0].materialesOrdenes
+			: [];
 
 	const columns = [
 		{
@@ -124,20 +129,24 @@ function DataTableMateriales() {
 			label: 'Espesor (mm)',
 		},
 		{
-			name: 'longitud_ancho',
+			name: 'medida_ancho',
 			label: 'Ancho (m)',
 		},
 		{
-			name: 'longitud_largo',
+			name: 'medida_largo',
 			label: 'Largo (m)',
 		},
 		{
-			name: 'costo_total',
+			name: 'precio_total',
 			label: 'Costo Total',
 		},
 		{
-			name: 'cantidad',
-			label: 'Cant.',
+			name: 'precio_m2',
+			label: 'Precio m2',
+		},
+		{
+			name: 'precio_ml',
+			label: 'Precio ml',
 		},
 		{
 			name: 'color',
@@ -203,7 +212,12 @@ function DataTableMateriales() {
 	];
 
 	const options: MUIDataTableOptions = {
-		tableId: 'materialesData',
+		download: false,
+		print: false,
+		search: false,
+		filter: false,
+		viewColumns: false,
+		tableId: 'materialesDataOrden',
 		selectableRowsHeader: false,
 		selectableRows: 'none',
 		filterType: 'checkbox',
@@ -225,34 +239,16 @@ function DataTableMateriales() {
 				rowsPerPage: 'Filas por páginas:',
 				displayRows: 'de',
 			},
-			toolbar: {
-				search: 'Buscar',
-				downloadCsv: 'Descargar CSV',
-				print: 'Imprimir',
-				viewColumns: 'Ver Columnas',
-				filterTable: 'Filtros de Tabla',
-			},
-			filter: {
-				all: 'All',
-				title: 'Filtros',
-				reset: 'Reiniciar',
-			},
-			viewColumns: {
-				title: 'Mostrar Columnas',
-				titleAria: 'Mostrar/Ocultar Columnas de Tabla ',
-			},
-			selectedRows: {
-				text: 'fila(s) seleccionadas',
-				delete: 'Eliminar',
-				deleteAria: 'Delete Selected Rows',
-			},
 		},
 	};
 
 	let modalContent;
 	if (crearMaterial) {
 		modalContent = (
-			<FormMateriales onCancel={handleCancel} material={updateMaterial} />
+			<FormMaterialesOrdenes
+				onCancel={handleCancel}
+				material={updateMaterial}
+			/>
 		);
 	} else if (eliminarMaterial) {
 		modalContent = (
@@ -260,7 +256,7 @@ function DataTableMateriales() {
 				<DialogTitle>Eliminar Material</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						¿Está seguro de querer eliminar este material?
+						¿Está seguro de querer eliminar este material de la orden?
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
@@ -284,11 +280,11 @@ function DataTableMateriales() {
 	}
 
 	return (
-		<div className='container my-10 mx-auto bg-slate-500'>
+		<div className='container my-2 mx-auto'>
 			<ThemeProvider theme={getMuiTheme()}>
 				<MUIDataTable
-					title='Lista de Materiales'
-					data={materiales}
+					title='Materiales de la orden'
+					data={materialesOrdenes}
 					columns={columns}
 					options={options}
 				/>
@@ -300,4 +296,4 @@ function DataTableMateriales() {
 	);
 }
 
-export default DataTableMateriales;
+export default DataTableMaterialesOrdenes;

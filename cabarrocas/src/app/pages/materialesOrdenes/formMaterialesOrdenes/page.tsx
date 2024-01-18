@@ -28,7 +28,7 @@ type Inputs = {
  *
  * @return {JSX.Element} The rendered form component.
  */
-function FormMateriales({ onCancel, material }: any) {
+function FormMaterialesOrdenes({ onCancel, material }: any) {
 	const { createMateriales, updateMaterial } = useMateriales();
 
 	const {
@@ -191,4 +191,4 @@ function FormMateriales({ onCancel, material }: any) {
 	);
 }
 
-export default FormMateriales;
+export default FormMaterialesOrdenes;
