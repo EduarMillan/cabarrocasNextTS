@@ -12,6 +12,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import DataTableMaterialesOrdenes from '@/app/pages/materialesOrdenes/dataMaterialesOrdenes/page';
+import WarningTwoToneIcon from '@mui/icons-material/WarningTwoTone';
 
 type Inputs = {
 	nombre: string;
@@ -108,7 +109,11 @@ function FormOrdenes({ onCancel, orden }: any) {
 		<div className='grid items-center justify-center m-1 grid-cols-1 w-full'>
 			<div>
 				<div className='bg-emerald-950   px-10 flex items-center justify-start p-2 mb-1'>
-					<p className='text-slate-50  text-xl'>Formulario de Ordenes</p>
+					<p className='text-slate-50  text-xl'>
+						{orden
+							? 'Actualizar orden de producción'
+							: 'Crear orden de producción'}
+					</p>
 				</div>
 
 				<div className='bg-zinc-500  rounded-md px-5 shadow-lg bg-gradient-to-r from-slate-200 to-slate-100'>
@@ -123,7 +128,7 @@ function FormOrdenes({ onCancel, orden }: any) {
 							type='text'
 							label='Nombre'
 							size='small'
-							defaultValue={orden ? orden.nombre : ' '}
+							defaultValue={orden ? orden.nombre : ''}
 							{...register('nombre')}
 							helperText={errors.nombre?.message}
 						/>
@@ -134,7 +139,7 @@ function FormOrdenes({ onCancel, orden }: any) {
 							id='orden_descripcion'
 							label='Descripción'
 							multiline={true}
-							defaultValue={orden ? orden.descripcion : ' '}
+							defaultValue={orden ? orden.descripcion : ''}
 							size='small'
 							{...register('descripcion')}
 							helperText={errors.descripcion?.message}
@@ -170,7 +175,7 @@ function FormOrdenes({ onCancel, orden }: any) {
 							select
 							label='Entidad'
 							size='small'
-							defaultValue={orden ? orden.entidad : ' '}
+							defaultValue={orden ? orden.entidad : ''}
 							{...register('entidad')}
 							helperText={errors.entidad?.message}
 						>
@@ -183,7 +188,7 @@ function FormOrdenes({ onCancel, orden }: any) {
 							id='orden_gastos_descripcion'
 							label='Descrip. otros gastos'
 							multiline={true}
-							defaultValue={orden ? orden.orden_gastos_descripcion : ' '}
+							defaultValue={orden ? orden.orden_gastos_descripcion : ''}
 							size='small'
 							{...register('otros_gastos_descripcion')}
 							helperText={errors.otros_gastos_descripcion?.message}
@@ -327,7 +332,20 @@ function FormOrdenes({ onCancel, orden }: any) {
 				</div>
 			</div>
 			<div>
-				<DataTableMaterialesOrdenes />
+				{orden ? (
+					<DataTableMaterialesOrdenes />
+				) : (
+					<>
+						<div className='flex align-middle justify-center'>
+							<WarningTwoToneIcon fontSize='large' color='warning' />
+						</div>
+						<div className='flex align-middle justify-center'>
+							<p className='text-red-500 font-semibold'>
+								No hay materiales asignados a esta orden actualmente
+							</p>
+						</div>
+					</>
+				)}
 			</div>
 		</div>
 	);
