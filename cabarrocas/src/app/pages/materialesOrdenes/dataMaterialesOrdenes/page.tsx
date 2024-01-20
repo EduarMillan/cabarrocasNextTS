@@ -29,7 +29,7 @@ import AddIcon from '@mui/icons-material/Add';
  *
  * @return {JSX.Element} The rendered "MaterialesOrdenes" component.
  */
-function DataTableMaterialesOrdenes(/*id_orden?: number*/) {
+function DataTableMaterialesOrdenes({ id_orden }: { id_orden: number }) {
 	const getMuiTheme = () =>
 		createTheme({
 			components: {
@@ -84,7 +84,7 @@ function DataTableMaterialesOrdenes(/*id_orden?: number*/) {
 			},
 		});
 
-	const { getMaterialesOrdenes, deleteMaterialOrdenById } =
+	const { deleteMaterialOrdenById, getMaterialesOrdenesById } =
 		useMaterialesOrdenes();
 	const materialesOrdenesState = useSelector(selectMaterialesOrdenes);
 	const [openModal, setOpenModal] = useState(false);
@@ -94,7 +94,7 @@ function DataTableMaterialesOrdenes(/*id_orden?: number*/) {
 	const [updateMaterial, setUpdateMaterial] = useState(null);
 
 	const deleteMaterialId = () => {
-		deleteMaterialOrdenById(idMaterial);
+		deleteMaterialOrdenById(id_orden);
 	};
 
 	const handleCancel = () => {
@@ -103,7 +103,7 @@ function DataTableMaterialesOrdenes(/*id_orden?: number*/) {
 	};
 
 	useEffect(() => {
-		getMaterialesOrdenes();
+		getMaterialesOrdenesById(id_orden);
 	}, []);
 
 	const materialesOrdenes =
@@ -115,6 +115,10 @@ function DataTableMaterialesOrdenes(/*id_orden?: number*/) {
 		{
 			name: 'id',
 			label: 'ID',
+		},
+		{
+			name: 'id_orden',
+			label: 'Orden',
 		},
 		{
 			name: 'nombre',
@@ -145,7 +149,7 @@ function DataTableMaterialesOrdenes(/*id_orden?: number*/) {
 			label: 'Precio m2',
 		},
 		{
-			name: 'precio_ml',
+			name: 'precio_largo',
 			label: 'Precio ml',
 		},
 		{

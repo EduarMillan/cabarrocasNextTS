@@ -333,7 +333,7 @@ function FormOrdenes({ onCancel, orden }: any) {
 			</div>
 			<div>
 				{orden ? (
-					<DataTableMaterialesOrdenes />
+					<DataTableMaterialesOrdenes id_orden={orden.id} />
 				) : (
 					<>
 						<div className='flex align-middle justify-center'>

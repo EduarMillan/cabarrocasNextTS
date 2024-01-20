@@ -9,14 +9,14 @@ import {
 } from '@/redux/features/materialesOrdenes/materialesOrdenesSlice';
 
 type Inputs = {
+	id_orden: string;
+	nombre: string;
+	descripcion: string;
 	medida_ancho: string;
+	medida_largo: string;
 	color: string;
 	precio_total: string;
-	descripcion: string;
 	espesor: string;
-	medida_largo: string;
-	nombre: string;
-	id_orden: string;
 	precio_largo: string;
 	precio_m2: string;
 };
@@ -75,6 +75,28 @@ export default function useMaterialesOrdenes() {
 	};
 
 	/**
+	 * Método que consulta los materialesOrdenes según un id_orden específico.
+	 *
+	 * @param {number} id_orden - El id_orden para filtrar los materiales.
+	 */
+	const getMaterialesOrdenesById = async (id_orden: number) => {
+		console.log(id_orden);
+		try {
+			const response = (await get(
+				`/materiales_Ordenes/${id_orden}`,
+			)) as AxiosResponse<Response>;
+
+			if (response.data) {
+				dispatch(setMaterialOrden(response.data));
+			}
+		} catch (error) {
+			throw new Error(
+				'Error durante la consulta de los materiales de la orden por id_orden',
+			);
+		}
+	};
+
+	/**
 	 * Metodo que elimina un material de la orden mediante id.
 	 *
 	 */
@@ -82,7 +104,7 @@ export default function useMaterialesOrdenes() {
 	const deleteMaterialOrdenById = async (id: number) => {
 		try {
 			const response = (await del(
-				`/materialestrabajosrealizados/${id}`,
+				`/materiales_Ordenes/${id}`,
 			)) as AxiosResponse<Response>;
 
 			if (response.data) {
@@ -111,7 +133,7 @@ export default function useMaterialesOrdenes() {
 	const createMaterialesOrden = async (material: Inputs) => {
 		try {
 			const response = (await post(
-				'/materialestrabajosrealizados',
+				'/materiales_Ordenes',
 				material,
 			)) as AxiosResponse<Response>;
 
@@ -138,16 +160,19 @@ export default function useMaterialesOrdenes() {
 	 *
 	 */
 
-	const updateMaterialOrden = async (id: number, material: Inputs) => {
+	const updateMaterialOrden = async (
+		id: number,
+		id_orden: number,
+		material: Inputs,
+	) => {
 		try {
 			const response = (await patch(
-				`/materialestrabajosrealizados/${id}`,
+				`/materiales_Ordenes/${id}`,
 				material,
 			)) as AxiosResponse<Response>;
 
 			if (response.data) {
-				getMaterialesOrdenes();
-
+				getMaterialesOrdenesById(id_orden);
 				toast.success('El material se ha actualizado satisfactoriamente', {
 					duration: 2000,
 					position: 'top-right',
@@ -168,5 +193,6 @@ export default function useMaterialesOrdenes() {
 		deleteMaterialOrdenById,
 		createMaterialesOrden,
 		updateMaterialOrden,
+		getMaterialesOrdenesById,
 	};
 }

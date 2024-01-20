@@ -99,12 +99,12 @@ export const materialSchema = z.object({
 		.max(100, {
 			message: 'Descripción muy larga (- de 100 letras)',
 		}),
-	longitud_ancho: z
+	medida_ancho: z
 		.string()
-		.refine(longitud_ancho => !isNaN(parseFloat(longitud_ancho)), {
+		.refine(medida_ancho => !isNaN(parseFloat(medida_ancho)), {
 			message: 'El ancho debe ser un número',
 		})
-		.refine(longitud_ancho => parseFloat(longitud_ancho) > 0, {
+		.refine(medida_ancho => parseFloat(medida_ancho) > 0, {
 			message: 'El ancho debe ser mayor que 0',
 		}),
 	nombre: z.enum(materiales, {
@@ -112,23 +112,20 @@ export const materialSchema = z.object({
 			message: 'Seleccione un material de la lista.',
 		}),
 	}),
-	longitud_largo: z
+	medida_largo: z
 		.string()
-		.refine(longitud_largo => !isNaN(parseFloat(longitud_largo)), {
+		.refine(medida_largo => !isNaN(parseFloat(medida_largo)), {
 			message: 'El largo debe ser un número',
 		})
-		.refine(longitud_largo => parseFloat(longitud_largo) > 0, {
+		.refine(medida_largo => parseFloat(medida_largo) > 0, {
 			message: 'El largo debe ser mayor que 0',
 		}),
-	cantidad: z.string().refine(cantidad => parseFloat(cantidad) > 0, {
-		message: 'La cantidad debe de ser mayor que 0',
-	}),
-	costo_total: z
+	precio_total: z
 		.string()
-		.refine(costo_total => !isNaN(parseFloat(costo_total)), {
+		.refine(precio_total => !isNaN(parseFloat(precio_total)), {
 			message: 'El Costo debe ser un número',
 		})
-		.refine(costo_total => parseFloat(costo_total) > 0, {
+		.refine(precio_total => parseFloat(precio_total) > 0, {
 			message: 'El Costo debe ser mayor que 0',
 		}),
 	color: z.enum(colores, {
@@ -143,5 +140,21 @@ export const materialSchema = z.object({
 		})
 		.refine(espesor => parseFloat(espesor) > 0, {
 			message: 'El grosor debe ser mayor que 0',
+		}),
+	precio_largo: z
+		.string()
+		.refine(precio_largo => !isNaN(parseFloat(precio_largo)), {
+			message: 'El precio del largo debe ser un número',
+		})
+		.refine(precio_largo => parseFloat(precio_largo) > 0, {
+			message: 'El precio del largo debe ser mayor que 0',
+		}),
+	precio_m2: z
+		.string()
+		.refine(precio_m2 => !isNaN(parseFloat(precio_m2)), {
+			message: 'El precio del m2 debe ser un número',
+		})
+		.refine(precio_m2 => parseFloat(precio_m2) > 0, {
+			message: 'El precio del m2 debe ser mayor que 0',
 		}),
 });

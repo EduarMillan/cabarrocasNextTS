@@ -4,10 +4,9 @@ import { conn } from '@/libs/mysql';
 export async function GET(request: any, { params }: any) {
 	try {
 		const result: Array<Object> = await conn.query(
-			'SELECT * FROM materialestrabajosrealizados WHERE id = ?',
+			'SELECT * FROM materialestrabajosrealizados WHERE id_orden = ?',
 			[params.id],
 		);
-
 		if (result.length === 0) {
 			return NextResponse.json(
 				{ message: 'Material no encontrado' },
@@ -15,7 +14,7 @@ export async function GET(request: any, { params }: any) {
 			);
 		}
 
-		return NextResponse.json(result[0]);
+		return NextResponse.json(result);
 	} catch (error: any) {
 		return NextResponse.json(
 			{
