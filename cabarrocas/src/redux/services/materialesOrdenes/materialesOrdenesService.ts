@@ -80,7 +80,6 @@ export default function useMaterialesOrdenes() {
 	 * @param {number} id_orden - El id_orden para filtrar los materiales.
 	 */
 	const getMaterialesOrdenesById = async (id_orden: number) => {
-		console.log(id_orden);
 		try {
 			const response = (await get(
 				`/materiales_Ordenes/${id_orden}`,
@@ -88,6 +87,8 @@ export default function useMaterialesOrdenes() {
 
 			if (response.data) {
 				dispatch(setMaterialOrden(response.data));
+			} else {
+				dispatch(setMaterialOrden([]));
 			}
 		} catch (error) {
 			throw new Error(

@@ -88,7 +88,7 @@ function FormMaterialesOrdenes({ onCancel, material }: any) {
 						Formulario de materiales de la orden
 					</p>
 				</div>
-				<div className='bg-zinc-500  rounded-md px-10 shadow-lg bg-gradient-to-r from-slate-200 to-slate-100'>
+				<div className='bg-zinc-500  rounded-md px-10  bg-gradient-to-r from-slate-200 to-slate-100'>
 					<form
 						className='grid grid-cols-3 gap-2 text-black pt-4 '
 						onSubmit={handleSubmit(saveMaterials)}
@@ -154,7 +154,7 @@ function FormMaterialesOrdenes({ onCancel, material }: any) {
 
 						<TextField
 							className='m-3 '
-							id='select-color'
+							id='select-color2'
 							select
 							label='Color'
 							size='small'

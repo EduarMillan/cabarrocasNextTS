@@ -107,6 +107,7 @@ function Ordenes() {
 	const [eliminarOrden, setEliminarOrden] = useState(false);
 	const [idOrden, setIdOrden] = useState(0);
 	const [updateOrden, setUpdateOrden] = useState(null);
+	const [lastId, setLastId] = useState<number>(0);
 
 	const deleteOrdenId = () => {
 		deleteOrdenById(idOrden);
@@ -117,8 +118,14 @@ function Ordenes() {
 		setCrearOrden(false);
 	};
 
+	const loadingData = async () => {
+		const id_Response = await getOrdenes();
+		const proxID = id_Response.data;
+		setLastId(proxID);
+	};
+
 	useEffect(() => {
-		getOrdenes();
+		loadingData();
 	}, []);
 
 	const ordenes = ordenesState.length > 0 ? ordenesState[0].ordenes : [];
@@ -290,7 +297,9 @@ function Ordenes() {
 
 	let modalContent;
 	if (crearOrden) {
-		modalContent = <FormOrdenes onCancel={handleCancel} orden={updateOrden} />;
+		modalContent = (
+			<FormOrdenes onCancel={handleCancel} orden={updateOrden} id={lastId} />
+		);
 	} else if (eliminarOrden) {
 		modalContent = (
 			<div>

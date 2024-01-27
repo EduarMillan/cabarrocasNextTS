@@ -41,7 +41,7 @@ interface Estado {
  *
  * @return {JSX.Element} The rendered form component.
  */
-function FormOrdenes({ onCancel, orden }: any) {
+function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 	const { createOrden, updateOrden } = useOrdenes();
 
 	const fechaActual = new Date();
@@ -111,8 +111,8 @@ function FormOrdenes({ onCancel, orden }: any) {
 				<div className='bg-emerald-950   px-10 flex items-center justify-start p-2 mb-1'>
 					<p className='text-slate-50  text-xl'>
 						{orden
-							? 'Actualizar orden de producción'
-							: 'Crear orden de producción'}
+							? `Actualizar orden de producción # ${orden.id}`
+							: `Crear orden de producción # ${id}`}
 					</p>
 				</div>
 

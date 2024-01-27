@@ -29,7 +29,9 @@ import AddIcon from '@mui/icons-material/Add';
  *
  * @return {JSX.Element} The rendered "MaterialesOrdenes" component.
  */
-function DataTableMaterialesOrdenes({ id_orden }: { id_orden: number }) {
+function DataTableMaterialesOrdenes({
+	id_orden,
+}: Readonly<{ id_orden: number }>) {
 	const getMuiTheme = () =>
 		createTheme({
 			components: {
@@ -94,7 +96,7 @@ function DataTableMaterialesOrdenes({ id_orden }: { id_orden: number }) {
 	const [updateMaterial, setUpdateMaterial] = useState(null);
 
 	const deleteMaterialId = () => {
-		deleteMaterialOrdenById(id_orden);
+		deleteMaterialOrdenById(idMaterial);
 	};
 
 	const handleCancel = () => {

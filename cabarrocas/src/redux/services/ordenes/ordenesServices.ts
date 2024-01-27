@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { AxiosResponse } from 'axios';
 import useHttpClient from '@/redux/services/http/httpClient';
-
 import { deleteOrden, setOrden } from '@/redux/features/ordenes/ordenesSlice';
 
 type Inputs = {
@@ -59,13 +58,14 @@ export default function useOrdenes() {
 	 *
 	 */
 
-	const getOrdenes = async (): Promise<AxiosResponse<Response>> => {
+	const getOrdenes = async (): Promise<AxiosResponse<number>> => {
 		try {
 			const response = (await get('/ordenes')) as AxiosResponse<Response>;
+			const id_response = (await get('/id_orden')) as AxiosResponse<number>;
 			if (response.data) {
 				dispatch(setOrden(response.data));
 			}
-			return response;
+			return id_response;
 		} catch (error) {
 			toast.error('Error al obtener las órdenes', {
 				duration: 2000,

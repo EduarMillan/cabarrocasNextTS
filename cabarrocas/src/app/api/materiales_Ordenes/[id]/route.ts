@@ -7,12 +7,6 @@ export async function GET(request: any, { params }: any) {
 			'SELECT * FROM materialestrabajosrealizados WHERE id_orden = ?',
 			[params.id],
 		);
-		if (result.length === 0) {
-			return NextResponse.json(
-				{ message: 'Material no encontrado' },
-				{ status: 404 },
-			);
-		}
 
 		return NextResponse.json(result);
 	} catch (error: any) {
@@ -21,7 +15,7 @@ export async function GET(request: any, { params }: any) {
 				message: error.message,
 			},
 			{
-				status: 404,
+				status: 500,
 			},
 		);
 	}
