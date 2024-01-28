@@ -26,6 +26,7 @@ import FormOrdenes from '../formOrdenes/page';
 import AddIcon from '@mui/icons-material/Add';
 
 type Orden = {
+	id: number;
 	nombre: string;
 	descripcion: string;
 	pago_efectivo: number;

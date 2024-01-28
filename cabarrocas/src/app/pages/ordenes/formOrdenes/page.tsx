@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, MenuItem } from '@mui/material';
@@ -14,7 +14,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import DataTableMaterialesOrdenes from '@/app/pages/materialesOrdenes/dataMaterialesOrdenes/page';
 import WarningTwoToneIcon from '@mui/icons-material/WarningTwoTone';
 
-type Inputs = {
+type Orden = {
+	id: number;
 	nombre: string;
 	descripcion: string;
 	pago_efectivo: boolean;
@@ -39,10 +40,65 @@ interface Estado {
 /**
  * Renders a form for selecting ordenes and their properties.
  *
- * @return {JSX.Element} The rendered form component.
+ * @param onCancel - Function to handle cancel action.
+ * @param orden - The orden object.
+ * @param id - The orden ID.
+ * @returns The rendered form component.
  */
-function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
+function FormOrdenes({
+	onCancel,
+	orden,
+	id,
+}: Readonly<{
+	onCancel: () => void;
+	orden: Orden | null;
+	id: number;
+}>): JSX.Element {
 	const { createOrden, updateOrden } = useOrdenes();
+
+	const [prec, setPrec] = useState(0);
+	const [represent, setRepresent] = useState(0);
+	const [onat, setOnat] = useState(0);
+	const [equipos, setEquipos] = useState(0);
+	const [matServ, setMatServ] = useState(0);
+	const [utilidad, setUtilidad] = useState(0);
+
+	const handlePrecioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const precio = parseFloat(event.target.value);
+		setPrec(precio);
+		console.log(prec);
+		const impRep = precio * 0.11;
+
+		const impOnat = (precio - impRep) * 0.35;
+
+		const impEquip = (precio - impRep - impOnat - matServ) * 0.1;
+
+		const util = precio - impRep - impOnat - impEquip - matServ;
+
+		setRepresent(parseFloat(impRep.toFixed(2)));
+		setOnat(parseFloat(impOnat.toFixed(2)));
+		setEquipos(parseFloat(impEquip.toFixed(2)));
+		setUtilidad(parseFloat(util.toFixed(2)));
+	};
+
+	const handleOtrosGastosChange = (
+		event: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		const otrosGastos = parseFloat(event.target.value);
+		setMatServ(otrosGastos);
+		console.log(otrosGastos);
+		console.log(prec);
+		const impRep = prec * 0.11;
+
+		const impOnat = (prec - impRep) * 0.35;
+
+		const impEquip = (prec - impRep - impOnat - matServ - otrosGastos) * 0.1;
+
+		const util = prec - impRep - impOnat - impEquip - matServ - otrosGastos;
+
+		setEquipos(parseFloat(impEquip.toFixed(2)));
+		setUtilidad(parseFloat(util.toFixed(2)));
+	};
 
 	const fechaActual = new Date();
 	const fechaActualFormat = fechaActual.toISOString().slice(0, 16);
@@ -52,7 +108,7 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 		handleSubmit,
 		setValue,
 		formState: { errors },
-	} = useForm<Inputs>({
+	} = useForm<Orden>({
 		resolver: zodResolver(ordenSchema),
 	});
 
@@ -93,10 +149,17 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 			setValue('utilidad', orden.utilidad.toString());
 			setValue('facturado', Boolean(orden.facturado));
 			setValue('entidad', orden.entidad);
+
+			setPrec(parseFloat(orden.precio));
+			setRepresent(parseFloat(orden.impuesto_representacion));
+			setOnat(parseFloat(orden.impuesto_onat));
+			setEquipos(parseFloat(orden.impuesto_equipos));
+			setUtilidad(parseFloat(orden.utilidad));
+			setMatServ(parseFloat(orden.costo_total));
 		}
 	}, [setValue, orden]);
 
-	const saveOrden: SubmitHandler<Inputs> = async (data: Inputs) => {
+	const saveOrden: SubmitHandler<Orden> = async (data: Orden) => {
 		if (orden) {
 			await updateOrden(orden.id, data);
 		} else {
@@ -120,7 +183,6 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 					<form
 						className='grid grid-cols-6 gap-1  pt-4 '
 						onSubmit={handleSubmit(saveOrden)}
-						//onSubmit={handleSubmit(data => console.log(data))}
 					>
 						<TextField
 							className='m-3  text-sm'
@@ -150,10 +212,11 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							type='text'
 							id='orden_precio'
 							label='Precio(CUP)'
-							defaultValue={orden ? orden.precio : '0'}
+							defaultValue={orden ? orden.precio : ''}
 							size='small'
 							{...register('precio')}
 							helperText={errors.precio?.message}
+							onChange={handlePrecioChange}
 						/>
 
 						<TextField
@@ -188,7 +251,7 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							id='orden_gastos_descripcion'
 							label='Descrip. otros gastos'
 							multiline={true}
-							defaultValue={orden ? orden.orden_gastos_descripcion : ''}
+							defaultValue={orden ? orden.otros_gastos_descripcion : ''}
 							size='small'
 							{...register('otros_gastos_descripcion')}
 							helperText={errors.otros_gastos_descripcion?.message}
@@ -199,10 +262,11 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							type='text'
 							id='otros_gastos'
 							label='Otros Gastos(CUP)'
-							defaultValue={orden ? orden.otros_gastos : '0'}
+							defaultValue={orden ? orden.costo_otros_gastos : ''}
 							size='small'
 							{...register('costo_otros_gastos')}
 							helperText={errors.costo_otros_gastos?.message}
+							onChange={handleOtrosGastosChange}
 						/>
 
 						<TextField
@@ -214,7 +278,7 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							}}
 							id='imp_rep'
 							label='Imp. Repres.(CUP)'
-							defaultValue={orden ? orden.impuesto_representacion : '0'}
+							value={represent}
 							size='small'
 							variant='filled'
 							{...register('impuesto_representacion')}
@@ -229,7 +293,7 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							}}
 							id='onat'
 							label='Imp. ONAT(CUP)'
-							defaultValue={orden ? orden.impuesto_onat : '0'}
+							value={onat}
 							size='small'
 							variant='filled'
 							{...register('impuesto_onat')}
@@ -244,7 +308,7 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							}}
 							id='imp_equipos'
 							label='Imp. Equipos(CUP)'
-							defaultValue={orden ? orden.impuesto_equipos : '0'}
+							value={equipos}
 							size='small'
 							variant='filled'
 							{...register('impuesto_equipos')}
@@ -258,8 +322,8 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							}}
 							className='m-3 text-sm'
 							id='orden_costo'
-							label='Costo Total(CUP)'
-							defaultValue={orden ? orden.costo_total : '0'}
+							label='Costo Mat + Servicios(CUP)'
+							value={matServ}
 							size='small'
 							variant='filled'
 							{...register('costo_total')}
@@ -274,7 +338,7 @@ function FormOrdenes({ onCancel, orden, id }: any): JSX.Element {
 							}}
 							id='orden_utilidad'
 							label='Utilidad (CUP)'
-							defaultValue={orden ? orden.utilidad : '0'}
+							value={utilidad}
 							size='small'
 							variant='filled'
 							{...register('utilidad')}
