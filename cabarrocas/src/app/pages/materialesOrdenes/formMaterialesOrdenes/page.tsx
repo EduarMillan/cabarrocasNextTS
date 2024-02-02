@@ -30,7 +30,7 @@ type Inputs = {
  *
  * @return {JSX.Element} The rendered form component.
  */
-function FormMaterialesOrdenes({ onCancel, material }: any) {
+function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 	const { createMaterialesOrden, updateMaterialOrden } = useMaterialesOrdenes();
 
 	const {
@@ -81,19 +81,32 @@ function FormMaterialesOrdenes({ onCancel, material }: any) {
 	};
 
 	return (
-		<div className='flex items-center justify-center m-1'>
+		<div className='grid items-center justify-center m-1 grid-cols-1 '>
 			<div>
-				<div className='bg-slate-900  rounded-md px-10 flex items-center justify-center p-2 mb-1 bg-gradient-to-r from-blue-900 to-blue-400'>
-					<p className='text-slate-50 font-normal '>
-						Formulario de materiales de la orden
+				<div className='bg-emerald-950   px-10 flex items-center justify-start p-2 mb-1'>
+					<p className='text-slate-50  text-xl'>
+						{material ? 'Actualizar material' : 'Crear material'}
 					</p>
 				</div>
-				<div className='bg-zinc-500  rounded-md px-10  bg-gradient-to-r from-slate-200 to-slate-100'>
+				<div className='bg-zinc-500  rounded-md px-5 shadow-lg bg-gradient-to-r from-slate-200 to-slate-100'>
 					<form
-						className='grid grid-cols-3 gap-2 text-black pt-4 '
+						className='grid grid-cols-5 gap-1 text-black pt-4 '
 						onSubmit={handleSubmit(saveMaterials)}
-						//onSubmit={handleSubmit(data => console.log(data))}
 					>
+						<TextField
+							className='m-3 text-sm'
+							type='text'
+							InputProps={{
+								readOnly: true,
+								sx: { color: 'green', borderBottom: '1px solid green' },
+							}}
+							id='outlined-idOrden'
+							label='Orden #'
+							value={idOrden}
+							size='small'
+							{...register('id_orden')}
+						/>
+
 						<TextField
 							className='m-3'
 							id='select-material'
@@ -197,7 +210,9 @@ function FormMaterialesOrdenes({ onCancel, material }: any) {
 							{...register('precio_largo')}
 							helperText={errors.precio_largo?.message}
 						/>
-
+						<div></div>
+						<div></div>
+						<div></div>
 						<div></div>
 						<div className='flex pb-5 justify-end items-end pt-6 space-x-4'>
 							<SecondaryButton name='Cancelar' onClick={onCancel} />

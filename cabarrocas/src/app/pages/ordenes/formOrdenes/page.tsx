@@ -12,7 +12,6 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import DataTableMaterialesOrdenes from '@/app/pages/materialesOrdenes/dataMaterialesOrdenes/page';
-import WarningTwoToneIcon from '@mui/icons-material/WarningTwoTone';
 
 type Orden = {
 	id: number;
@@ -62,42 +61,20 @@ function FormOrdenes({
 	const [equipos, setEquipos] = useState(0);
 	const [matServ, setMatServ] = useState(0);
 	const [utilidad, setUtilidad] = useState(0);
+	const [otrosGastosCosto, setOtrosGastosCosto] = useState(0);
 
 	const handlePrecioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const precio = parseFloat(event.target.value);
-		setPrec(precio);
-		console.log(prec);
-		const impRep = precio * 0.11;
+		let precio = 0;
+		let otrosGastos = 0;
 
-		const impOnat = (precio - impRep) * 0.35;
-
-		const impEquip = (precio - impRep - impOnat - matServ) * 0.1;
-
-		const util = precio - impRep - impOnat - impEquip - matServ;
-
-		setRepresent(parseFloat(impRep.toFixed(2)));
-		setOnat(parseFloat(impOnat.toFixed(2)));
-		setEquipos(parseFloat(impEquip.toFixed(2)));
-		setUtilidad(parseFloat(util.toFixed(2)));
-	};
-
-	const handleOtrosGastosChange = (
-		event: React.ChangeEvent<HTMLInputElement>,
-	) => {
-		const otrosGastos = parseFloat(event.target.value);
-		setMatServ(otrosGastos);
-		console.log(otrosGastos);
-		console.log(prec);
-		const impRep = prec * 0.11;
-
-		const impOnat = (prec - impRep) * 0.35;
-
-		const impEquip = (prec - impRep - impOnat - matServ - otrosGastos) * 0.1;
-
-		const util = prec - impRep - impOnat - impEquip - matServ - otrosGastos;
-
-		setEquipos(parseFloat(impEquip.toFixed(2)));
-		setUtilidad(parseFloat(util.toFixed(2)));
+		if (event.target.name === 'precio') {
+			precio = parseFloat(event.target.value);
+			setPrec(precio);
+		}
+		if (event.target.name === 'costo_otros_gastos') {
+			otrosGastos = parseFloat(event.target.value);
+			setOtrosGastosCosto(otrosGastos);
+		}
 	};
 
 	const fechaActual = new Date();
@@ -129,6 +106,23 @@ function FormOrdenes({
 			[name]: !prevState[name],
 		}));
 	};
+
+	useEffect(() => {
+		const impRep = prec * 0.11;
+
+		const impOnat = (prec - impRep) * 0.35;
+
+		const impEquip =
+			(prec - impRep - impOnat - matServ - otrosGastosCosto) * 0.1;
+
+		const util =
+			prec - impRep - impOnat - impEquip - matServ - otrosGastosCosto;
+
+		setRepresent(parseFloat(impRep.toFixed(2)));
+		setOnat(parseFloat(impOnat.toFixed(2)));
+		setEquipos(parseFloat(impEquip.toFixed(2)));
+		setUtilidad(parseFloat(util.toFixed(2)));
+	}, [prec, otrosGastosCosto]);
 
 	useEffect(() => {
 		if (orden) {
@@ -169,7 +163,7 @@ function FormOrdenes({
 	};
 
 	return (
-		<div className='grid items-center justify-center m-1 grid-cols-1 w-full'>
+		<div className='grid items-center justify-center m-1 grid-cols-1 '>
 			<div>
 				<div className='bg-emerald-950   px-10 flex items-center justify-start p-2 mb-1'>
 					<p className='text-slate-50  text-xl'>
@@ -266,7 +260,7 @@ function FormOrdenes({
 							size='small'
 							{...register('costo_otros_gastos')}
 							helperText={errors.costo_otros_gastos?.message}
-							onChange={handleOtrosGastosChange}
+							onChange={handlePrecioChange}
 						/>
 
 						<TextField
@@ -399,16 +393,7 @@ function FormOrdenes({
 				{orden ? (
 					<DataTableMaterialesOrdenes id_orden={orden.id} />
 				) : (
-					<>
-						<div className='flex align-middle justify-center'>
-							<WarningTwoToneIcon fontSize='large' color='warning' />
-						</div>
-						<div className='flex align-middle justify-center'>
-							<p className='text-red-500 font-semibold'>
-								No hay materiales asignados a esta orden actualmente
-							</p>
-						</div>
-					</>
+					<DataTableMaterialesOrdenes id_orden={id} />
 				)}
 			</div>
 		</div>

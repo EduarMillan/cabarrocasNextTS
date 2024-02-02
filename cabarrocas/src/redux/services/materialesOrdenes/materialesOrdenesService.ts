@@ -139,7 +139,7 @@ export default function useMaterialesOrdenes() {
 			)) as AxiosResponse<Response>;
 
 			if (response.data) {
-				getMaterialesOrdenes();
+				getMaterialesOrdenesById(parseInt(material.id_orden));
 
 				toast.success('El material se ha creado satisfactoriamente', {
 					duration: 2000,

@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 			entidad,
 			costo_total,
 		}: FormData = await req.json();
-		console.log(pago_efectivo);
+
 		const precio_num = parseFloat(precio);
 		const costo_otros_gastos_num = parseFloat(costo_otros_gastos);
 		const costo_total_num = parseFloat(costo_total);

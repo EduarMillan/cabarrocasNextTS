@@ -254,6 +254,7 @@ function DataTableMaterialesOrdenes({
 			<FormMaterialesOrdenes
 				onCancel={handleCancel}
 				material={updateMaterial}
+				idOrden={id_orden}
 			/>
 		);
 	} else if (eliminarMaterial) {
@@ -294,7 +295,7 @@ function DataTableMaterialesOrdenes({
 					columns={columns}
 					options={options}
 				/>
-				<CustomModal open={openModal} width='md'>
+				<CustomModal open={openModal} width='xl'>
 					{modalContent}
 				</CustomModal>
 			</ThemeProvider>

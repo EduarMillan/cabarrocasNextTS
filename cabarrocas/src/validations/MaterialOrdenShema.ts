@@ -157,4 +157,5 @@ export const materialSchema = z.object({
 		.refine(precio_m2 => parseFloat(precio_m2) > 0, {
 			message: 'El precio del m2 debe ser mayor que 0',
 		}),
+	id_orden: z.string(),
 });

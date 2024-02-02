@@ -127,7 +127,7 @@ function Ordenes() {
 
 	useEffect(() => {
 		loadingData();
-	}, []);
+	}, [openModal]);
 
 	const ordenes = ordenesState.length > 0 ? ordenesState[0].ordenes : [];
 
