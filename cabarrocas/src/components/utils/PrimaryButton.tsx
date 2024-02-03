@@ -15,7 +15,7 @@ type PrimaryButtonProps = {
 const PrimaryButton: React.FC<PrimaryButtonProps> = ({ name, onClick }) => {
 	return (
 		<Button
-			className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+			className='bg-blue-500 borderhover:bg-blue-700  active:bg-blue-700 focus:border-blue-500 focus:ring focus:ring-blue-200'
 			type='submit'
 			variant='contained'
 			onClick={onClick}

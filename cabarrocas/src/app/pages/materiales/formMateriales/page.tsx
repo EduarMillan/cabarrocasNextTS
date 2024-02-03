@@ -88,7 +88,7 @@ function FormMateriales({ onCancel, material }: any) {
 						onSubmit={handleSubmit(saveMaterials)}
 					>
 						<TextField
-							className='m-3 shadow-lg'
+							className='m-3'
 							id='select-material'
 							select
 							label='Material'
@@ -101,7 +101,7 @@ function FormMateriales({ onCancel, material }: any) {
 						</TextField>
 
 						<TextField
-							className='m-3 shadow-lg text-sm '
+							className='m-3 text-sm '
 							type='text'
 							id='outlined-descripcion'
 							label='Descripción'
@@ -113,7 +113,7 @@ function FormMateriales({ onCancel, material }: any) {
 						/>
 
 						<TextField
-							className='m-3 shadow-lg text-sm'
+							className='m-3 text-sm'
 							type='text'
 							id='outlined-espesor'
 							label='Espesor(mm)'
@@ -124,7 +124,7 @@ function FormMateriales({ onCancel, material }: any) {
 						/>
 
 						<TextField
-							className='m-3 shadow-lg'
+							className='m-3'
 							type='text'
 							id='outlined-ancho'
 							label='Ancho(m)'
@@ -135,7 +135,7 @@ function FormMateriales({ onCancel, material }: any) {
 						/>
 
 						<TextField
-							className='m-3 shadow-lg'
+							className='m-3'
 							type='text'
 							id='outlined-largo'
 							label='Largo(m)'
@@ -146,12 +146,12 @@ function FormMateriales({ onCancel, material }: any) {
 						/>
 
 						<TextField
-							className='m-3 shadow-lg'
+							className='m-3'
 							id='select-color'
 							select
 							label='Color'
 							size='small'
-							defaultValue={material ? material[9] : ''}
+							defaultValue={material ? material[8] : ''}
 							{...register('color')}
 							helperText={errors.color?.message}
 						>
@@ -159,22 +159,22 @@ function FormMateriales({ onCancel, material }: any) {
 						</TextField>
 
 						<TextField
-							className='m-3 shadow-lg'
+							className='m-3'
 							type='text'
 							id='outlined-costo'
 							label='Costo(CUP)'
-							defaultValue={material ? material[7] : ''}
+							defaultValue={material ? material[6] : ''}
 							size='small'
 							{...register('costo_total')}
 							helperText={errors.costo_total?.message}
 						/>
 
 						<TextField
-							className='m-3 shadow-lg'
+							className='m-3'
 							type='number'
 							id='outlined-cantidad'
 							label='Cantidad'
-							defaultValue={material ? material[8] : ''}
+							defaultValue={material ? material[7] : ''}
 							size='small'
 							{...register('cantidad')}
 							helperText={errors.cantidad?.message}

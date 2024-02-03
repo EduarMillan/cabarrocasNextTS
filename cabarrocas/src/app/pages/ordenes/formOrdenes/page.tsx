@@ -2,7 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TextField, MenuItem } from '@mui/material';
+import {
+	TextField,
+	MenuItem,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+} from '@mui/material';
 import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
 import useOrdenes from '@/redux/services/ordenes/ordenesServices';
@@ -11,7 +18,11 @@ import Switch from '@mui/material/Switch';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import CustomModal from '@/components/utils/CustomModal';
 import DataTableMaterialesOrdenes from '@/app/pages/materialesOrdenes/dataMaterialesOrdenes/page';
+import { useSelector } from 'react-redux';
+import { selectMaterialesOrdenes } from '@/redux/features/materialesOrdenes/materialesOrdenesSlice';
+import { selectOrdenes } from '@/redux/features/ordenes/ordenesSlice';
 
 type Orden = {
 	id: number;
@@ -55,6 +66,9 @@ function FormOrdenes({
 }>): JSX.Element {
 	const { createOrden, updateOrden } = useOrdenes();
 
+	const [openModal, setOpenModal] = useState(false);
+	const materialesOrdenesState = useSelector(selectMaterialesOrdenes);
+	const ordenesState = useSelector(selectOrdenes);
 	const [prec, setPrec] = useState(0);
 	const [represent, setRepresent] = useState(0);
 	const [onat, setOnat] = useState(0);
@@ -62,6 +76,42 @@ function FormOrdenes({
 	const [matServ, setMatServ] = useState(0);
 	const [utilidad, setUtilidad] = useState(0);
 	const [otrosGastosCosto, setOtrosGastosCosto] = useState(0);
+
+	const ordenes = ordenesState.length > 0 ? ordenesState[0].ordenes : [];
+
+	const materialesOrdenes =
+		materialesOrdenesState.length > 0
+			? materialesOrdenesState[0].materialesOrdenes
+			: [];
+
+	const closeForm = () => {
+		let identificador: number;
+		if (orden) identificador = orden.id;
+		else identificador = id;
+
+		if (materialesOrdenes.length > 0) {
+			if (
+				ordenes.length > 0 &&
+				ordenes.some((orden: Orden) => orden.id === identificador)
+			) {
+				setOpenModal(false);
+				onCancel();
+			} else {
+				setOpenModal(true);
+			}
+		} else {
+			setOpenModal(false);
+			onCancel();
+		}
+	};
+
+	const costoMateriales = () => {
+		let costo = 0;
+		for (const element of materialesOrdenes) {
+			costo += element.precio_total;
+		}
+		setMatServ(costo);
+	};
 
 	const handlePrecioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		let precio = 0;
@@ -108,21 +158,22 @@ function FormOrdenes({
 	};
 
 	useEffect(() => {
-		const impRep = prec * 0.11;
-
-		const impOnat = (prec - impRep) * 0.35;
-
+		costoMateriales();
+		let impRep = 0;
+		let impOnat = 0;
+		if (!state.pago_efectivo) {
+			impRep = prec * 0.11;
+			impOnat = (prec - impRep) * 0.35;
+		}
 		const impEquip =
 			(prec - impRep - impOnat - matServ - otrosGastosCosto) * 0.1;
-
 		const util =
 			prec - impRep - impOnat - impEquip - matServ - otrosGastosCosto;
-
 		setRepresent(parseFloat(impRep.toFixed(2)));
 		setOnat(parseFloat(impOnat.toFixed(2)));
 		setEquipos(parseFloat(impEquip.toFixed(2)));
 		setUtilidad(parseFloat(util.toFixed(2)));
-	}, [prec, otrosGastosCosto]);
+	}, [prec, otrosGastosCosto, state.pago_efectivo, materialesOrdenesState]);
 
 	useEffect(() => {
 		if (orden) {
@@ -383,7 +434,7 @@ function FormOrdenes({
 						<div></div>
 						<div></div>
 						<div className='flex pb-5 justify-end items-end pt-6 space-x-4'>
-							<SecondaryButton name='Cancelar' onClick={onCancel} />
+							<SecondaryButton name='Cancelar' onClick={closeForm} />
 							<PrimaryButton name={orden ? 'Actualizar' : 'Guardar'} />
 						</div>
 					</form>
@@ -396,6 +447,26 @@ function FormOrdenes({
 					<DataTableMaterialesOrdenes id_orden={id} />
 				)}
 			</div>
+			<CustomModal open={openModal} width='xl'>
+				<div>
+					<DialogTitle>Advertencia</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							Está cancelando una orden que contiene materiales asociados a
+							esta. Por favor elimine los materiales asociados antes de cancelar
+							la orden.
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<PrimaryButton
+							name='Aceptar'
+							onClick={() => {
+								setOpenModal(false);
+							}}
+						/>
+					</DialogActions>
+				</div>
+			</CustomModal>
 		</div>
 	);
 }

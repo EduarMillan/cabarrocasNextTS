@@ -67,7 +67,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 			setValue('precio_total', material[7].toString());
 			setValue('precio_m2', material[8].toString());
 			setValue('precio_largo', material[9].toString());
-			setValue('color', material[8]);
+			setValue('color', material[10]);
 		}
 	}, [setValue, material]);
 
