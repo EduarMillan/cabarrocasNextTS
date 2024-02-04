@@ -218,11 +218,11 @@ function FormOrdenes({
 		<div className='grid items-center justify-center m-1 grid-cols-1 '>
 			<div>
 				<div className='bg-emerald-950   px-10 flex items-center justify-start p-2 mb-1'>
-					<p className='text-slate-50  text-xl'>
+					<div className='text-slate-50  text-xl'>
 						{orden
 							? `Actualizar orden de producción # ${orden.id}`
 							: `Crear orden de producción # ${id}`}
-					</p>
+					</div>
 				</div>
 
 				<div className='bg-zinc-500  rounded-md px-5 shadow-lg bg-gradient-to-r from-slate-200 to-slate-100'>
@@ -238,9 +238,9 @@ function FormOrdenes({
 							size='small'
 							defaultValue={orden ? orden.nombre : ''}
 							{...register('nombre')}
-							helperText=<p className='text-red-500'>
-								{errors.nombre?.message}
-							</p>
+							helperText={
+								<div className='text-red-500'>{errors.nombre?.message}</div>
+							}
 						/>
 
 						<TextField
@@ -252,9 +252,11 @@ function FormOrdenes({
 							defaultValue={orden ? orden.descripcion : ''}
 							size='small'
 							{...register('descripcion')}
-							helperText=<p className='text-red-500'>
-								{errors.descripcion?.message}
-							</p>
+							helperText={
+								<div className='text-red-500'>
+									{errors.descripcion?.message}
+								</div>
+							}
 						/>
 
 						<TextField
@@ -265,9 +267,9 @@ function FormOrdenes({
 							defaultValue={orden ? orden.precio : ''}
 							size='small'
 							{...register('precio')}
-							helperText=<p className='text-red-500'>
-								{errors.precio?.message}
-							</p>
+							helperText={
+								<div className='text-red-500'>{errors.precio?.message}</div>
+							}
 							onChange={handlePrecioChange}
 						/>
 
@@ -281,7 +283,9 @@ function FormOrdenes({
 							}
 							size='small'
 							{...register('fecha')}
-							helperText=<p className='text-red-500'>{errors.fecha?.message}</p>
+							helperText={
+								<div className='text-red-500'>{errors.fecha?.message}</div>
+							}
 						/>
 
 						<TextField
@@ -292,9 +296,9 @@ function FormOrdenes({
 							size='small'
 							defaultValue={orden ? orden.entidad : ''}
 							{...register('entidad')}
-							helperText=<p className='text-red-500'>
-								{errors.entidad?.message}
-							</p>
+							helperText={
+								<div className='text-red-500'>{errors.entidad?.message}</div>
+							}
 						>
 							{entidadOptions}
 						</TextField>
@@ -308,9 +312,11 @@ function FormOrdenes({
 							defaultValue={orden ? orden.otros_gastos_descripcion : ''}
 							size='small'
 							{...register('otros_gastos_descripcion')}
-							helperText=<p className='text-red-500'>
-								{errors.otros_gastos_descripcion?.message}
-							</p>
+							helperText={
+								<div className='text-red-500'>
+									{errors.otros_gastos_descripcion?.message}
+								</div>
+							}
 						/>
 
 						<TextField
@@ -321,9 +327,11 @@ function FormOrdenes({
 							defaultValue={orden ? orden.costo_otros_gastos : ''}
 							size='small'
 							{...register('costo_otros_gastos')}
-							helperText=<p className='text-red-500'>
-								{errors.costo_otros_gastos?.message}
-							</p>
+							helperText={
+								<div className='text-red-500'>
+									{errors.costo_otros_gastos?.message}
+								</div>
+							}
 							onChange={handlePrecioChange}
 						/>
 

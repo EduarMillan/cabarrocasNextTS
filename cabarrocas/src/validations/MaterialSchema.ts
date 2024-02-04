@@ -90,6 +90,31 @@ export const mappedColores: { [key in Colores]: string } = {
 	Bronce: 'Bronce',
 };
 
+const validateMedidas = () => {
+	let medidaAnchoValue: number | null = null;
+
+	return {
+		setMedidaAncho: (value: string) => {
+			medidaAnchoValue = parseFloat(value);
+		},
+		validateMedidaLargo: (value: string) => {
+			const medidaLargoValue = parseFloat(value);
+			if (isNaN(medidaLargoValue) || medidaLargoValue <= 0) {
+				return 'El largo debe ser un número mayor que 0';
+			}
+			if (medidaAnchoValue === null) {
+				return 'Primero debe validar el ancho';
+			}
+			if (medidaLargoValue >= medidaAnchoValue) {
+				return 'El largo debe ser mayor que el ancho';
+			}
+			return null;
+		},
+	};
+};
+
+const validator = validateMedidas();
+
 export const materialSchema = z.object({
 	descripcion: z
 		.string()
@@ -101,9 +126,15 @@ export const materialSchema = z.object({
 		}),
 	longitud_ancho: z
 		.string()
-		.refine(longitud_ancho => !isNaN(parseFloat(longitud_ancho)), {
-			message: 'El ancho debe ser un número',
-		})
+		.refine(
+			longitud_ancho => {
+				validator.setMedidaAncho(longitud_ancho);
+				return !isNaN(parseFloat(longitud_ancho));
+			},
+			{
+				message: 'El ancho debe ser un número',
+			},
+		)
 		.refine(longitud_ancho => parseFloat(longitud_ancho) > 0, {
 			message: 'El ancho debe ser mayor que 0',
 		}),
@@ -119,7 +150,11 @@ export const materialSchema = z.object({
 		})
 		.refine(longitud_largo => parseFloat(longitud_largo) > 0, {
 			message: 'El largo debe ser mayor que 0',
-		}),
+		})
+		.refine(
+			validator.validateMedidaLargo,
+			'El largo debe ser mayor que el ancho',
+		),
 	cantidad: z.string().refine(cantidad => parseFloat(cantidad) > 0, {
 		message: 'La cantidad debe de ser mayor que 0',
 	}),
