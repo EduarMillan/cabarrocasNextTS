@@ -90,6 +90,31 @@ export const mappedColores: { [key in Colores]: string } = {
 	Bronce: 'Bronce',
 };
 
+const validateMedidas = () => {
+	let medidaAnchoValue: number | null = null;
+
+	return {
+		setMedidaAncho: (value: string) => {
+			medidaAnchoValue = parseFloat(value);
+		},
+		validateMedidaLargo: (value: string) => {
+			const medidaLargoValue = parseFloat(value);
+			if (isNaN(medidaLargoValue) || medidaLargoValue <= 0) {
+				return 'El largo debe ser un número mayor que 0';
+			}
+			if (medidaAnchoValue === null) {
+				return 'Primero debe validar el ancho';
+			}
+			if (medidaLargoValue >= medidaAnchoValue) {
+				return 'El largo debe ser mayor que el ancho';
+			}
+			return null;
+		},
+	};
+};
+
+const validator = validateMedidas();
+
 export const materialSchema = z.object({
 	descripcion: z
 		.string()
@@ -101,12 +126,14 @@ export const materialSchema = z.object({
 		}),
 	medida_ancho: z
 		.string()
-		.refine(medida_ancho => !isNaN(parseFloat(medida_ancho)), {
-			message: 'El ancho debe ser un número',
-		})
-		.refine(medida_ancho => parseFloat(medida_ancho) > 0, {
-			message: 'El ancho debe ser mayor que 0',
-		}),
+		.refine(medida_ancho => {
+			validator.setMedidaAncho(medida_ancho);
+			return !isNaN(parseFloat(medida_ancho));
+		}, 'El ancho debe ser un número')
+		.refine(
+			medida_ancho => parseFloat(medida_ancho) > 0,
+			'El ancho debe ser mayor que 0',
+		),
 	nombre: z.enum(materiales, {
 		errorMap: () => ({
 			message: 'Seleccione un material de la lista.',
@@ -114,12 +141,18 @@ export const materialSchema = z.object({
 	}),
 	medida_largo: z
 		.string()
-		.refine(medida_largo => !isNaN(parseFloat(medida_largo)), {
-			message: 'El largo debe ser un número',
-		})
-		.refine(medida_largo => parseFloat(medida_largo) > 0, {
-			message: 'El largo debe ser mayor que 0',
-		}),
+		.refine(
+			medida_largo => !isNaN(parseFloat(medida_largo)),
+			'El largo debe ser un número',
+		)
+		.refine(
+			medida_largo => parseFloat(medida_largo) > 0,
+			'El largo debe ser mayor que 0',
+		)
+		.refine(
+			validator.validateMedidaLargo,
+			'El largo debe ser mayor que el ancho',
+		),
 	precio_total: z
 		.string()
 		.refine(precio_total => !isNaN(parseFloat(precio_total)), {

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, MenuItem } from '@mui/material';
@@ -11,6 +11,9 @@ import {
 	mappedMateriales,
 	mappedColores,
 } from '@/validations/MaterialOrdenShema';
+import { useSelector } from 'react-redux';
+import useMateriales from '@/redux/services/materiales/materialesService';
+import { selectMateriales } from '@/redux/features/materiales/materialesSlice';
 
 type Inputs = {
 	id_orden: string;
@@ -31,7 +34,20 @@ type Inputs = {
  * @return {JSX.Element} The rendered form component.
  */
 function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
+	const { getMateriales } = useMateriales();
+	const materialesState = useSelector(selectMateriales);
 	const { createMaterialesOrden, updateMaterialOrden } = useMaterialesOrdenes();
+	const [name, setName] = useState('');
+	const [espesor, setEspesor] = useState(0);
+	const [color, setColor] = useState('');
+	const [ancho, setAncho] = useState(0);
+	const [largo, setLargo] = useState(0);
+	const [precioM2, setPrecioM2] = useState(0);
+	const [precioMl, setPrecioMl] = useState(0);
+	const [precioT, setPrecioT] = useState(0);
+
+	const materiales =
+		materialesState.length > 0 ? materialesState[0].materiales : [];
 
 	const {
 		register,
@@ -56,7 +72,81 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 		</MenuItem>
 	));
 
+	const handlePrecioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		let name: string;
+		let espesor = 0;
+		let color: string;
+		let ancho = 0;
+		let largo = 0;
+
+		if (event.target.name === 'nombre') {
+			name = event.target.value;
+			setName(name);
+		} else if (event.target.name === 'espesor') {
+			espesor = parseInt(event.target.value);
+			setEspesor(espesor);
+		} else if (event.target.name === 'color') {
+			color = event.target.value;
+			setColor(color);
+		} else if (event.target.name === 'medida_ancho') {
+			ancho = parseFloat(event.target.value);
+			setAncho(ancho);
+		} else if (event.target.name === 'medida_largo') {
+			largo = parseFloat(event.target.value);
+			setLargo(largo);
+		}
+	};
+
+	const costosMaterial = () => {
+		let m2 = 0;
+		let precio = 0;
+		let ml = 0;
+		let i = 0;
+		for (const element of materiales) {
+			if (
+				element.nombre === name &&
+				element.espesor === espesor &&
+				element.color === color
+			) {
+				m2 += element.costo_m2;
+				precio += element.costo_total;
+				ml += element.costo_ml;
+				i++;
+			}
+		}
+		if (m2 === 0 || i === 0) setPrecioM2(0);
+		else setPrecioM2(parseFloat((precio / i / m2).toFixed(2)));
+
+		if (ml === 0 || i === 0) setPrecioMl(0);
+		else setPrecioMl(parseFloat((precio / i / ml).toFixed(2)));
+
+		const viniloOptions = [
+			'Vinilo_Brillo',
+			'Vinilo_Mate',
+			'Vinilo_Corte',
+			'Laminado',
+			'Papel',
+			'Lona_Banner',
+			'Lona_Mesh',
+			'Esmerilado',
+			'Vinilo_Microperforado',
+			'Lienzo',
+			'Tela',
+		];
+
+		if (viniloOptions.includes(name)) {
+			setPrecioT(parseFloat((precio / largo).toFixed(2)));
+		} else {
+			setPrecioT(parseFloat((precio / (largo * ancho)).toFixed(2)));
+		}
+	};
+
 	useEffect(() => {
+		costosMaterial();
+	}, [ancho, largo, name, espesor, color, materiales]);
+
+	useEffect(() => {
+		getMateriales();
 		if (material) {
 			setValue('id_orden', material[1].toString());
 			setValue('nombre', material[2]);
@@ -118,6 +208,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							helperText=<p className='text-red-500'>
 								{errors.nombre?.message}
 							</p>
+							onChange={handlePrecioChange}
 						>
 							{materialOptions}
 						</TextField>
@@ -147,6 +238,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							helperText=<p className='text-red-500'>
 								{errors.espesor?.message}
 							</p>
+							onChange={handlePrecioChange}
 						/>
 
 						<TextField
@@ -160,6 +252,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							helperText=<p className='text-red-500'>
 								{errors.medida_ancho?.message}
 							</p>
+							onChange={handlePrecioChange}
 						/>
 
 						<TextField
@@ -173,6 +266,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							helperText=<p className='text-red-500'>
 								{errors.medida_largo?.message}
 							</p>
+							onChange={handlePrecioChange}
 						/>
 
 						<TextField
@@ -184,6 +278,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[10] : ''}
 							{...register('color')}
 							helperText=<p className='text-red-500'>{errors.color?.message}</p>
+							onChange={handlePrecioChange}
 						>
 							{colorOptions}
 						</TextField>
@@ -196,9 +291,10 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[7] : ''}
 							size='small'
 							{...register('precio_total')}
-							helperText=<p className='text-red-500'>
-								{errors.precio_total?.message}
-							</p>
+							helperText=<>
+								<p className='text-red-500'>{errors.precio_total?.message}</p>
+								<p>Sugerencia de precio: {precioT} CUP </p>
+							</>
 						/>
 
 						<TextField
@@ -209,9 +305,10 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[8] : ''}
 							size='small'
 							{...register('precio_m2')}
-							helperText=<p className='text-red-500'>
-								{errors.precio_m2?.message}
-							</p>
+							helperText=<>
+								<p className='text-red-500'>{errors.precio_m2?.message}</p>
+								<p>Sugerencia de precio: {precioM2} CUP</p>
+							</>
 						/>
 
 						<TextField
@@ -222,9 +319,10 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[9] : ''}
 							size='small'
 							{...register('precio_largo')}
-							helperText=<p className='text-red-500'>
-								{errors.precio_largo?.message}
-							</p>
+							helperText=<>
+								<p className='text-red-500'>{errors.precio_largo?.message}</p>
+								<p>Sugerencia de precio: {precioMl} CUP</p>
+							</>
 						/>
 						<div></div>
 						<div></div>

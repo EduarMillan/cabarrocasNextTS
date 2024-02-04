@@ -121,8 +121,7 @@ function FormOrdenes({
 		if (event.target.name === 'precio') {
 			precio = parseFloat(event.target.value);
 			setPrec(precio);
-		}
-		if (event.target.name === 'costo_otros_gastos') {
+		} else if (event.target.name === 'costo_otros_gastos') {
 			otrosGastos = parseFloat(event.target.value);
 			setOtrosGastosCosto(otrosGastos);
 		}
