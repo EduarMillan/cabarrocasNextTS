@@ -115,7 +115,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							size='small'
 							defaultValue={material ? material[2] : ''}
 							{...register('nombre')}
-							helperText={errors.nombre?.message}
+							helperText=<p className='text-red-500'>
+								{errors.nombre?.message}
+							</p>
 						>
 							{materialOptions}
 						</TextField>
@@ -129,7 +131,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[3] : ''}
 							size='small'
 							{...register('descripcion')}
-							helperText={errors.descripcion?.message}
+							helperText=<p className='text-red-500'>
+								{errors.descripcion?.message}
+							</p>
 						/>
 
 						<TextField
@@ -140,7 +144,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[4] : ''}
 							size='small'
 							{...register('espesor')}
-							helperText={errors.espesor?.message}
+							helperText=<p className='text-red-500'>
+								{errors.espesor?.message}
+							</p>
 						/>
 
 						<TextField
@@ -151,7 +157,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[5] : ''}
 							size='small'
 							{...register('medida_ancho')}
-							helperText={errors.medida_ancho?.message}
+							helperText=<p className='text-red-500'>
+								{errors.medida_ancho?.message}
+							</p>
 						/>
 
 						<TextField
@@ -162,7 +170,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[6] : ''}
 							size='small'
 							{...register('medida_largo')}
-							helperText={errors.medida_largo?.message}
+							helperText=<p className='text-red-500'>
+								{errors.medida_largo?.message}
+							</p>
 						/>
 
 						<TextField
@@ -173,7 +183,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							size='small'
 							defaultValue={material ? material[10] : ''}
 							{...register('color')}
-							helperText={errors.color?.message}
+							helperText=<p className='text-red-500'>{errors.color?.message}</p>
 						>
 							{colorOptions}
 						</TextField>
@@ -186,7 +196,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[7] : ''}
 							size='small'
 							{...register('precio_total')}
-							helperText={errors.precio_total?.message}
+							helperText=<p className='text-red-500'>
+								{errors.precio_total?.message}
+							</p>
 						/>
 
 						<TextField
@@ -197,7 +209,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[8] : ''}
 							size='small'
 							{...register('precio_m2')}
-							helperText={errors.precio_m2?.message}
+							helperText=<p className='text-red-500'>
+								{errors.precio_m2?.message}
+							</p>
 						/>
 
 						<TextField
@@ -208,7 +222,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 							defaultValue={material ? material[9] : ''}
 							size='small'
 							{...register('precio_largo')}
-							helperText={errors.precio_largo?.message}
+							helperText=<p className='text-red-500'>
+								{errors.precio_largo?.message}
+							</p>
 						/>
 						<div></div>
 						<div></div>

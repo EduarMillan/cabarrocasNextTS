@@ -5,6 +5,7 @@ import MUIDataTable, {
 	MUIDataTableColumn,
 	MUIDataTableOptions,
 } from 'mui-datatables';
+import WarningIcon from '@mui/icons-material/Warning';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import {
@@ -304,9 +305,18 @@ function Ordenes() {
 	} else if (eliminarOrden) {
 		modalContent = (
 			<div>
-				<DialogTitle>Eliminar Orden</DialogTitle>
+				<DialogTitle className='bg-green-500 text-white h-10 pt-2 pl-4'>
+					<WarningIcon
+						style={{
+							color: 'yellow',
+							paddingBottom: '5px',
+							paddingRight: '5px',
+						}}
+					/>
+					Eliminar orden
+				</DialogTitle>
 				<DialogContent>
-					<DialogContentText>
+					<DialogContentText className='pt-10 font-semibold'>
 						¿Está seguro de querer eliminar esta orden?
 					</DialogContentText>
 				</DialogContent>

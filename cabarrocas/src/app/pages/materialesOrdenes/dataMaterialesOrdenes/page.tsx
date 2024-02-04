@@ -13,6 +13,7 @@ import {
 	DialogTitle,
 	IconButton,
 } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
 import { useSelector } from 'react-redux';
 import useMaterialesOrdenes from '@/redux/services/materialesOrdenes/materialesOrdenesService';
 import { selectMaterialesOrdenes } from '@/redux/features/materialesOrdenes/materialesOrdenesSlice';
@@ -260,9 +261,18 @@ function DataTableMaterialesOrdenes({
 	} else if (eliminarMaterial) {
 		modalContent = (
 			<div>
-				<DialogTitle>Eliminar Material</DialogTitle>
+				<DialogTitle className='bg-green-500 text-white h-10 pt-2 pl-4'>
+					<WarningIcon
+						style={{
+							color: 'yellow',
+							paddingBottom: '5px',
+							paddingRight: '5px',
+						}}
+					/>
+					Eliminar material
+				</DialogTitle>
 				<DialogContent>
-					<DialogContentText>
+					<DialogContentText className='pt-10 font-semibold'>
 						¿Está seguro de querer eliminar este material de la orden?
 					</DialogContentText>
 				</DialogContent>

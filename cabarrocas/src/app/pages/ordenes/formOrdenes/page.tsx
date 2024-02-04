@@ -10,6 +10,7 @@ import {
 	DialogContentText,
 	DialogActions,
 } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
 import PrimaryButton from '@/components/utils/PrimaryButton';
 import SecondaryButton from '@/components/utils/SecondaryButton';
 import useOrdenes from '@/redux/services/ordenes/ordenesServices';
@@ -208,6 +209,7 @@ function FormOrdenes({
 		if (orden) {
 			await updateOrden(orden.id, data);
 		} else {
+			console.log(data);
 			await createOrden(data);
 		}
 		onCancel();
@@ -237,7 +239,9 @@ function FormOrdenes({
 							size='small'
 							defaultValue={orden ? orden.nombre : ''}
 							{...register('nombre')}
-							helperText={errors.nombre?.message}
+							helperText=<p className='text-red-500'>
+								{errors.nombre?.message}
+							</p>
 						/>
 
 						<TextField
@@ -249,7 +253,9 @@ function FormOrdenes({
 							defaultValue={orden ? orden.descripcion : ''}
 							size='small'
 							{...register('descripcion')}
-							helperText={errors.descripcion?.message}
+							helperText=<p className='text-red-500'>
+								{errors.descripcion?.message}
+							</p>
 						/>
 
 						<TextField
@@ -260,7 +266,9 @@ function FormOrdenes({
 							defaultValue={orden ? orden.precio : ''}
 							size='small'
 							{...register('precio')}
-							helperText={errors.precio?.message}
+							helperText=<p className='text-red-500'>
+								{errors.precio?.message}
+							</p>
 							onChange={handlePrecioChange}
 						/>
 
@@ -274,7 +282,7 @@ function FormOrdenes({
 							}
 							size='small'
 							{...register('fecha')}
-							helperText={errors.fecha?.message}
+							helperText=<p className='text-red-500'>{errors.fecha?.message}</p>
 						/>
 
 						<TextField
@@ -285,7 +293,9 @@ function FormOrdenes({
 							size='small'
 							defaultValue={orden ? orden.entidad : ''}
 							{...register('entidad')}
-							helperText={errors.entidad?.message}
+							helperText=<p className='text-red-500'>
+								{errors.entidad?.message}
+							</p>
 						>
 							{entidadOptions}
 						</TextField>
@@ -299,7 +309,9 @@ function FormOrdenes({
 							defaultValue={orden ? orden.otros_gastos_descripcion : ''}
 							size='small'
 							{...register('otros_gastos_descripcion')}
-							helperText={errors.otros_gastos_descripcion?.message}
+							helperText=<p className='text-red-500'>
+								{errors.otros_gastos_descripcion?.message}
+							</p>
 						/>
 
 						<TextField
@@ -310,7 +322,9 @@ function FormOrdenes({
 							defaultValue={orden ? orden.costo_otros_gastos : ''}
 							size='small'
 							{...register('costo_otros_gastos')}
-							helperText={errors.costo_otros_gastos?.message}
+							helperText=<p className='text-red-500'>
+								{errors.costo_otros_gastos?.message}
+							</p>
 							onChange={handlePrecioChange}
 						/>
 
@@ -449,12 +463,22 @@ function FormOrdenes({
 			</div>
 			<CustomModal open={openModal} width='xl'>
 				<div>
-					<DialogTitle>Advertencia</DialogTitle>
+					<DialogTitle className='bg-emerald-950 text-yellow-500 h-10 pt-2 pl-4'>
+						<WarningIcon
+							style={{
+								color: 'yellow',
+								paddingBottom: '5px',
+								paddingRight: '5px',
+							}}
+						/>
+						Advertencia
+					</DialogTitle>
 					<DialogContent>
-						<DialogContentText>
+						<DialogContentText className='pt-10 font-semibold'>
 							Está cancelando una orden que contiene materiales asociados a
-							esta. Por favor elimine los materiales asociados antes de cancelar
-							la orden.
+							esta.
+							<br /> Por favor elimine los materiales asociados antes de
+							cancelar la orden.
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>

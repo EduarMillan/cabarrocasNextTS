@@ -95,7 +95,9 @@ function FormMateriales({ onCancel, material }: any) {
 							size='small'
 							defaultValue={material ? material[1] : ''}
 							{...register('nombre')}
-							helperText={errors.nombre?.message}
+							helperText=<p className='text-red-500'>
+								{errors.nombre?.message}
+							</p>
 						>
 							{materialOptions}
 						</TextField>
@@ -109,7 +111,9 @@ function FormMateriales({ onCancel, material }: any) {
 							defaultValue={material ? material[2] : ''}
 							size='small'
 							{...register('descripcion')}
-							helperText={errors.descripcion?.message}
+							helperText=<p className='text-red-500'>
+								{errors.descripcion?.message}
+							</p>
 						/>
 
 						<TextField
@@ -120,7 +124,9 @@ function FormMateriales({ onCancel, material }: any) {
 							defaultValue={material ? material[3] : ''}
 							size='small'
 							{...register('espesor')}
-							helperText={errors.espesor?.message}
+							helperText=<p className='text-red-500'>
+								{errors.espesor?.message}
+							</p>
 						/>
 
 						<TextField
@@ -131,7 +137,9 @@ function FormMateriales({ onCancel, material }: any) {
 							defaultValue={material ? material[4] : ''}
 							size='small'
 							{...register('longitud_ancho')}
-							helperText={errors.longitud_ancho?.message}
+							helperText=<p className='text-red-500'>
+								{errors.longitud_ancho?.message}
+							</p>
 						/>
 
 						<TextField
@@ -142,7 +150,9 @@ function FormMateriales({ onCancel, material }: any) {
 							defaultValue={material ? material[5] : ''}
 							size='small'
 							{...register('longitud_largo')}
-							helperText={errors.longitud_largo?.message}
+							helperText=<p className='text-red-500'>
+								{errors.longitud_largo?.message}
+							</p>
 						/>
 
 						<TextField
@@ -153,7 +163,7 @@ function FormMateriales({ onCancel, material }: any) {
 							size='small'
 							defaultValue={material ? material[8] : ''}
 							{...register('color')}
-							helperText={errors.color?.message}
+							helperText=<p className='text-red-500'>{errors.color?.message}</p>
 						>
 							{colorOptions}
 						</TextField>
@@ -166,7 +176,9 @@ function FormMateriales({ onCancel, material }: any) {
 							defaultValue={material ? material[6] : ''}
 							size='small'
 							{...register('costo_total')}
-							helperText={errors.costo_total?.message}
+							helperText=<p className='text-red-500'>
+								{errors.costo_total?.message}
+							</p>
 						/>
 
 						<TextField
@@ -177,7 +189,9 @@ function FormMateriales({ onCancel, material }: any) {
 							defaultValue={material ? material[7] : ''}
 							size='small'
 							{...register('cantidad')}
-							helperText={errors.cantidad?.message}
+							helperText=<p className='text-red-500'>
+								{errors.cantidad?.message}
+							</p>
 						/>
 						<div></div>
 						<div className='flex pb-5 justify-end items-end pt-6 space-x-4'>
