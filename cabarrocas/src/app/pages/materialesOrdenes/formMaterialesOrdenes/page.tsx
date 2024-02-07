@@ -115,10 +115,10 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 			}
 		}
 		if (m2 === 0 || i === 0) setPrecioM2(0);
-		else setPrecioM2(parseFloat((precio / i / m2).toFixed(2)));
+		else setPrecioM2(parseFloat((m2 / i).toFixed(2)));
 
 		if (ml === 0 || i === 0) setPrecioMl(0);
-		else setPrecioMl(parseFloat((precio / i / ml).toFixed(2)));
+		else setPrecioMl(parseFloat((ml / i).toFixed(2)));
 
 		const viniloOptions = [
 			'Vinilo_Brillo',
@@ -135,9 +135,9 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 		];
 
 		if (viniloOptions.includes(name)) {
-			setPrecioT(parseFloat((precio / largo).toFixed(2)));
+			setPrecioT(parseFloat((precioMl * largo).toFixed(2)));
 		} else {
-			setPrecioT(parseFloat((precio / (largo * ancho)).toFixed(2)));
+			setPrecioT(parseFloat((precioM2 * largo * ancho).toFixed(2)));
 		}
 	};
 
@@ -245,6 +245,22 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 
 						<TextField
 							className='m-3 '
+							id='select-color2'
+							select
+							label='Color'
+							size='small'
+							defaultValue={material ? material[10] : ''}
+							{...register('color')}
+							helperText={
+								<div className='text-red-500'>{errors.color?.message}</div>
+							}
+							onChange={handlePrecioChange}
+						>
+							{colorOptions}
+						</TextField>
+
+						<TextField
+							className='m-3 '
 							type='text'
 							id='outlined-ancho'
 							label='Ancho(m)'
@@ -277,22 +293,6 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 
 						<TextField
 							className='m-3 '
-							id='select-color2'
-							select
-							label='Color'
-							size='small'
-							defaultValue={material ? material[10] : ''}
-							{...register('color')}
-							helperText={
-								<div className='text-red-500'>{errors.color?.message}</div>
-							}
-							onChange={handlePrecioChange}
-						>
-							{colorOptions}
-						</TextField>
-
-						<TextField
-							className='m-3 '
 							type='text'
 							id='outlined-costo'
 							label='Costo(CUP)'
@@ -304,7 +304,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 									<div className='text-red-500'>
 										{errors.precio_total?.message}
 									</div>
-									<div>Sugerencia de precio: {precioT} CUP </div>
+									<div>Valor sugerido: {precioT} CUP </div>
 								</>
 							}
 						/>
@@ -322,7 +322,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 									<div className='text-red-500'>
 										{errors.precio_m2?.message}
 									</div>
-									<div>Sugerencia de precio: {precioM2} CUP</div>
+									<div>Valor sugerido: {precioM2} CUP</div>
 								</>
 							}
 						/>
@@ -340,7 +340,7 @@ function FormMaterialesOrdenes({ onCancel, material, idOrden }: any) {
 									<div className='text-red-500'>
 										{errors.precio_largo?.message}
 									</div>
-									<div>Sugerencia de precio: {precioMl} CUP</div>
+									<div>Valor sugerido: {precioMl} CUP</div>
 								</>
 							}
 						/>

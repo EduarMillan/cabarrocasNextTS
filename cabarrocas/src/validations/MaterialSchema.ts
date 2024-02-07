@@ -16,6 +16,7 @@ const materiales = [
 	'Vinilo_Brillo',
 	'Vinilo_Mate',
 	'Vinilo_Corte',
+	'Vinilo_Pared',
 	'Laminado',
 	'Papel',
 	'Lona_Banner',
@@ -44,6 +45,7 @@ export const mappedMateriales: { [key in Materiales]: string } = {
 	Vinilo_Brillo: 'Vinilo_Brillo',
 	Vinilo_Mate: 'Vinilo_Mate',
 	Vinilo_Corte: 'Vinilo_Corte',
+	Vinilo_Pared: 'Vinilo_Pared',
 	Laminado: 'Laminado',
 	Papel: 'Papel',
 	Lona_Banner: 'Lona_Banner',
@@ -69,6 +71,7 @@ const colores = [
 	'Dorado',
 	'Plata',
 	'Bronce',
+	'Esmerilado',
 ] as const;
 
 export type Colores = (typeof colores)[number];
@@ -88,6 +91,7 @@ export const mappedColores: { [key in Colores]: string } = {
 	Dorado: 'Dorado',
 	Plata: 'Plata',
 	Bronce: 'Bronce',
+	Esmerilado: 'Esmerilado',
 };
 
 const validateMedidas = () => {
@@ -121,8 +125,8 @@ export const materialSchema = z.object({
 		.min(3, {
 			message: 'Descripción muy corta (+ de 3 letras)',
 		})
-		.max(100, {
-			message: 'Descripción muy larga (- de 100 letras)',
+		.max(700, {
+			message: 'Descripción muy larga (- de 700 letras)',
 		}),
 	longitud_ancho: z
 		.string()

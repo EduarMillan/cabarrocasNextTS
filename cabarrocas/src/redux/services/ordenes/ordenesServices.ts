@@ -113,7 +113,6 @@ export default function useOrdenes() {
 				'/ordenes',
 				orden,
 			)) as AxiosResponse<Response>;
-
 			if (response.data) {
 				getOrdenes();
 
@@ -143,7 +142,6 @@ export default function useOrdenes() {
 				`/ordenes/${id}`,
 				orden,
 			)) as AxiosResponse<Response>;
-
 			if (response.data) {
 				getOrdenes();
 

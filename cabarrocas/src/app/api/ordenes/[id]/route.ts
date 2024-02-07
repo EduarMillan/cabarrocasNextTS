@@ -92,19 +92,14 @@ export async function PATCH(request: Request, { params }: any) {
 			facturado,
 			entidad,
 			costo_total,
+			impuesto_onat,
+			impuesto_equipos,
+			utilidad,
+			impuesto_representacion,
 		}: FormData = await request.json();
 
-		const precio_num = parseFloat(precio);
-		const costo_otros_gastos_num = parseFloat(costo_otros_gastos);
-		const costo_total_num = parseFloat(costo_total);
-
-		let impRepres: number;
-		let onat: number;
 		let efectivo;
 		let facturado_bool;
-
-		//revisar esta logica
-		const costoTotal = costo_total_num + costo_otros_gastos_num;
 
 		if (facturado) {
 			facturado_bool = 1;
@@ -113,23 +108,10 @@ export async function PATCH(request: Request, { params }: any) {
 		}
 
 		if (pago_efectivo) {
-			impRepres = 0;
-			onat = 0;
 			efectivo = 1;
 		} else {
-			impRepres = precio_num * 0.11;
-			onat = (precio_num - impRepres) * 0.35;
 			efectivo = 0;
 		}
-
-		const impEquip =
-			(precio_num -
-				impRepres -
-				onat -
-				costo_total_num -
-				costo_otros_gastos_num) *
-			0.1;
-		const utilidad = precio_num - impRepres - onat - impEquip - costoTotal;
 
 		const result: any = await conn.query(
 			'UPDATE ordenes SET nombre = ?, descripcion = ?, pago_efectivo = ?, precio = ?, fecha = ?, otros_gastos_descripcion = ?, costo_otros_gastos = ?, impuesto_representacion = ?, impuesto_onat =?, impuesto_equipos = ?, costo_total = ?, utilidad=?, facturado = ?, entidad=?  WHERE id=?',
@@ -137,14 +119,14 @@ export async function PATCH(request: Request, { params }: any) {
 				nombre,
 				descripcion,
 				efectivo,
-				precio_num,
+				precio,
 				fecha,
 				otros_gastos_descripcion,
-				costo_otros_gastos_num,
-				impRepres,
-				onat,
-				impEquip,
-				costoTotal,
+				costo_otros_gastos,
+				impuesto_representacion,
+				impuesto_onat,
+				impuesto_equipos,
+				costo_total,
 				utilidad,
 				facturado_bool,
 				entidad,

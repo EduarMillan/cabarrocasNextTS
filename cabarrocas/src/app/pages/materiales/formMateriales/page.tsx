@@ -135,6 +135,21 @@ function FormMateriales({ onCancel, material }: any) {
 
 						<TextField
 							className='m-3'
+							id='select-color'
+							select
+							label='Color'
+							size='small'
+							defaultValue={material ? material[8] : ''}
+							{...register('color')}
+							helperText={
+								<div className='text-red-500'>{errors.color?.message}</div>
+							}
+						>
+							{colorOptions}
+						</TextField>
+
+						<TextField
+							className='m-3'
 							type='text'
 							id='outlined-ancho'
 							label='Ancho(m)'
@@ -162,21 +177,6 @@ function FormMateriales({ onCancel, material }: any) {
 								</div>
 							}
 						/>
-
-						<TextField
-							className='m-3'
-							id='select-color'
-							select
-							label='Color'
-							size='small'
-							defaultValue={material ? material[8] : ''}
-							{...register('color')}
-							helperText={
-								<div className='text-red-500'>{errors.color?.message}</div>
-							}
-						>
-							{colorOptions}
-						</TextField>
 
 						<TextField
 							className='m-3'

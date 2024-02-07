@@ -121,8 +121,8 @@ export const materialSchema = z.object({
 		.min(3, {
 			message: 'Descripción muy corta (+ de 3 letras)',
 		})
-		.max(100, {
-			message: 'Descripción muy larga (- de 100 letras)',
+		.max(700, {
+			message: 'Descripción muy larga (- de 700 letras)',
 		}),
 	medida_ancho: z
 		.string()

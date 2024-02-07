@@ -7,20 +7,18 @@ type modalTypes = {
 	width: DialogProps['maxWidth'];
 };
 
-export default function CustomModal(props: modalTypes) {
+export default function CustomModal(props: Readonly<modalTypes>) {
 	const paperStyle = {
 		backgroundColor: '#EAECEE',
 	};
 
 	return (
-		<React.Fragment>
-			<Dialog
-				open={props.open}
-				maxWidth={props.width}
-				PaperProps={{ style: paperStyle }}
-			>
-				{props.children}
-			</Dialog>
-		</React.Fragment>
+		<Dialog
+			open={props.open}
+			maxWidth={props.width}
+			PaperProps={{ style: paperStyle }}
+		>
+			{props.children}
+		</Dialog>
 	);
 }

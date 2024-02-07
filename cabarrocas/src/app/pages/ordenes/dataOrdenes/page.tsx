@@ -181,7 +181,7 @@ function Ordenes() {
 		},
 		{
 			name: 'costo_total',
-			label: 'Costo Total',
+			label: 'Costo Material',
 		},
 		{
 			name: 'precio',

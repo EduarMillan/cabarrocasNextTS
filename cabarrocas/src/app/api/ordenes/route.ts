@@ -36,14 +36,12 @@ export async function POST(req: Request) {
 			facturado,
 			entidad,
 			costo_total,
+			impuesto_representacion,
+			utilidad,
+			impuesto_onat,
+			impuesto_equipos,
 		}: FormData = await req.json();
 
-		const precio_num = parseFloat(precio);
-		const costo_otros_gastos_num = parseFloat(costo_otros_gastos);
-		const costo_total_num = parseFloat(costo_total);
-
-		let impRepres: number;
-		let onat: number;
 		let efectivo;
 		let facturado_bool;
 
@@ -54,29 +52,10 @@ export async function POST(req: Request) {
 		}
 
 		if (pago_efectivo) {
-			impRepres = 0;
-			onat = 0;
 			efectivo = 1;
 		} else {
-			impRepres = precio_num * 0.11;
-			onat = (precio_num - impRepres) * 0.35;
 			efectivo = 0;
 		}
-
-		const impEquipos: number =
-			(precio_num -
-				impRepres -
-				onat -
-				costo_otros_gastos_num -
-				costo_total_num) *
-			0.1;
-		const utilidad: number =
-			precio_num -
-			impRepres -
-			onat -
-			impEquipos -
-			costo_otros_gastos_num -
-			costo_total_num;
 
 		await conn.query(
 			'INSERT INTO ordenes ( nombre, descripcion, pago_efectivo, precio, fecha, otros_gastos_descripcion, costo_otros_gastos, impuesto_representacion, impuesto_onat, impuesto_equipos, costo_total, utilidad, facturado, entidad) VALUES ( ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)',
@@ -84,14 +63,14 @@ export async function POST(req: Request) {
 				nombre,
 				descripcion,
 				efectivo,
-				precio_num,
+				precio,
 				fecha,
 				otros_gastos_descripcion,
-				costo_otros_gastos_num,
-				impRepres,
-				onat,
-				impEquipos,
-				costo_total_num,
+				costo_otros_gastos,
+				impuesto_representacion,
+				impuesto_onat,
+				impuesto_equipos,
+				costo_total,
 				utilidad,
 				facturado_bool,
 				entidad,

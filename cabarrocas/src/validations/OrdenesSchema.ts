@@ -24,8 +24,8 @@ export const ordenSchema = z.object({
 		.min(3, {
 			message: 'Descripción muy corta (+ de 3 letras)',
 		})
-		.max(120, {
-			message: 'Descripción muy larga (- de 120 letras)',
+		.max(700, {
+			message: 'Descripción muy larga (- de 700 letras)',
 		}),
 	precio: z
 		.string()
@@ -40,8 +40,8 @@ export const ordenSchema = z.object({
 		.min(3, {
 			message: 'Descripción muy corta (+ de 3 letras)',
 		})
-		.max(120, {
-			message: 'Descripción muy larga (- de 120 letras)',
+		.max(700, {
+			message: 'Descripción muy larga (- de 700 letras)',
 		}),
 	costo_otros_gastos: z
 		.string()

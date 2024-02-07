@@ -165,15 +165,28 @@ function FormOrdenes({
 			impRep = prec * 0.11;
 			impOnat = (prec - impRep) * 0.35;
 		}
-		const impEquip =
-			(prec - impRep - impOnat - matServ - otrosGastosCosto) * 0.1;
-		const util =
-			prec - impRep - impOnat - impEquip - matServ - otrosGastosCosto;
+		let impEquip = (prec - impRep - impOnat - matServ - otrosGastosCosto) * 0.1;
+		let util = prec - impRep - impOnat - impEquip - matServ - otrosGastosCosto;
 		setRepresent(parseFloat(impRep.toFixed(2)));
 		setOnat(parseFloat(impOnat.toFixed(2)));
 		setEquipos(parseFloat(impEquip.toFixed(2)));
 		setUtilidad(parseFloat(util.toFixed(2)));
-	}, [prec, otrosGastosCosto, state.pago_efectivo, materialesOrdenesState]);
+
+		setValue(
+			'impuesto_representacion',
+			parseFloat(impRep.toFixed(2)).toString(),
+		);
+		setValue('impuesto_onat', parseFloat(impOnat.toFixed(2)).toString());
+		setValue('impuesto_equipos', parseFloat(impEquip.toFixed(2)).toString());
+		setValue('costo_total', matServ.toString());
+		setValue('utilidad', parseFloat(util.toFixed(2)).toString());
+	}, [
+		prec,
+		otrosGastosCosto,
+		state.pago_efectivo,
+		materialesOrdenesState,
+		matServ,
+	]);
 
 	useEffect(() => {
 		if (orden) {
@@ -201,6 +214,7 @@ function FormOrdenes({
 			setEquipos(parseFloat(orden.impuesto_equipos));
 			setUtilidad(parseFloat(orden.utilidad));
 			setMatServ(parseFloat(orden.costo_total));
+			setOtrosGastosCosto(parseFloat(orden.costo_otros_gastos));
 		}
 	}, [setValue, orden]);
 
@@ -208,7 +222,6 @@ function FormOrdenes({
 		if (orden) {
 			await updateOrden(orden.id, data);
 		} else {
-			console.log(data);
 			await createOrden(data);
 		}
 		onCancel();
@@ -388,7 +401,7 @@ function FormOrdenes({
 							}}
 							className='m-3 text-sm'
 							id='orden_costo'
-							label='Costo Mat + Servicios(CUP)'
+							label='Costo Materiales (CUP)'
 							value={matServ}
 							size='small'
 							variant='filled'
